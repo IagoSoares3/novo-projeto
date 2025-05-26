@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel - ART OF FIGHT</title>
+    <style>
+        :root {
+            --primary-color: #FF4D4D;
+            --secondary-color: #1A1A1A;
+            --accent-color: #FFD700;
+            --background-light: #FFFFFF;
+            --text-light: #333333;
+            --background-dark: #1a1a1a;
+            --text-dark: #FFFFFF;
+            --card-light: #FFFFFF;
+            --card-dark: #2a2a2a;
+            --input-light: #f5f5f5;
+            --input-dark: #333333;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        body.dark-mode {
+            color: var(--text-dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 20px;
+            padding: 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+
+        .dark-mode .card {
+            background: var(--card-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 i {
+            font-size: 1.4rem;
+        }
+
+        .card-content {
+            color: #666;
+        }
+
+        .dark-mode .card-content {
+            color: #aaa;
+        }
+
+        .card-content p {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--card-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .schedule-table {
+            background: var(--card-dark);
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dark-mode .schedule-table th,
+        .dark-mode .schedule-table td {
+            border-color: #444;
+        }
+
+        .schedule-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .schedule-table tr:hover {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .dark-mode .schedule-table tr:hover {
+            background: rgba(255, 77, 77, 0.2);
+        }
+
+        .attendance-list {
+            list-style: none;
+        }
+
+        .attendance-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark-mode .attendance-list li {
+            border-color: #444;
+        }
+
+        .attendance-list li:last-child {
+            border-bottom: none;
+        }
+
+        .payment-history {
+            list-style: none;
+        }
+
+        .payment-history li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark-mode .payment-history li {
+            border-color: #444;
+        }
+
+        .payment-history li:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.paid {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status.pending {
+            background: var(--warning-color);
+            color: black;
+        }
+
+        .status.overdue {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: white;
+            position: relative;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .dark-mode .progress-bar {
+            background: #444;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .badge.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge.success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .badge.warning {
+            background: var(--warning-color);
+            color: black;
+        }
+
+        .badge.danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            font-weight: bold;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-details h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .user-details p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .user-details .faixa {
+            display: inline-block;
+            padding: 5px 15px;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .planos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .plano-card {
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+            text-align: center;
+        }
+
+        .dark-mode .plano-card {
+            background: var(--card-dark);
+        }
+
+        .plano-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .plano-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plano-card .preco {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .plano-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            text-align: left;
+        }
+
+        .plano-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            color: var(--text-light);
+        }
+
+        .dark-mode .plano-card ul li {
+            border-color: #444;
+            color: var(--text-dark);
+        }
+
+        .plano-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .plano-card ul li:before {
+            content: "✓";
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .plano-card .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .user-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <h1>ART OF FIGHT</h1>
+        </div>
+        <div class="user-info">
+            <span id="userName">Usuário</span>
+            <button class="btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="sem-assinatura" style="display: none;">
+            <div class="card">
+                <h2>Atenção!</h2>
+                <p>Você não possui uma assinatura ativa. Para acessar o sistema, por favor escolha um dos nossos planos:
+                </p>
+                <div class="planos-grid">
+                    <div class="plano-card">
+                        <h3>Plano Mensal</h3>
+                        <p class="preco">R$ 150,00</p>
+                        <ul>
+                            <li>Acesso a todas as aulas do mês</li>
+                            <li>Kimono</li>
+                            <li>Faixa</li>
+                            <li>Aulas ilimitadas</li>
+                        </ul>
+                        <button class="btn" onclick="selecionarPlano(1)">Selecionar</button>
+                    </div>
+                    <div class="plano-card">
+                        <h3>Plano Semestral</h3>
+                        <p class="preco">R$ 800,00</p>
+                        <ul>
+                            <li>Acesso a todas as aulas por 6 meses</li>
+                            <li>Kimono</li>
+                            <li>Faixa</li>
+                            <li>Aulas ilimitadas</li>
+                            <li>Exame de faixa</li>
+                        </ul>
+                        <button class="btn" onclick="selecionarPlano(2)">Selecionar</button>
+                    </div>
+                    <div class="plano-card">
+                        <h3>Plano Anual</h3>
+                        <p class="preco">R$ 1500,00</p>
+                        <ul>
+                            <li>Acesso a todas as aulas por 12 meses</li>
+                            <li>Kimono</li>
+                            <li>Faixa</li>
+                            <li>Aulas ilimitadas</li>
+                            <li>Exame de faixa</li>
+                            <li>Camiseta exclusiva</li>
+                        </ul>
+                        <button class="btn" onclick="selecionarPlano(3)">Selecionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard-content" style="display: none;">
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">J</div>
+                <div class="user-details">
+                    <h2 id="userFullName">João Silva</h2>
+                    <p id="userEmail">joao@email.com</p>
+                    <p>Plano: <span id="planoAtual">Mensal</span></p>
+                    <p>Vencimento: <span id="dataVencimento">01/06/2024</span></p>
+                    <div class="faixa" id="userFaixaDisplay">Faixa Branca</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="openTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </div>
+                <div class="tab" onclick="openTab('aulas')">
+                    <i class="fas fa-calendar-alt"></i> Aulas
+                </div>
+                <div class="tab" onclick="openTab('frequencia')">
+                    <i class="fas fa-check-circle"></i> Frequência
+                </div>
+                <div class="tab" onclick="openTab('pagamentos')">
+                    <i class="fas fa-credit-card"></i> Pagamentos
+                </div>
+                <div class="tab" onclick="openTab('contato')">
+                    <i class="fas fa-envelope"></i> Contato
+                </div>
+            </div>
+
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h2><i class="fas fa-calendar-day"></i> Próxima Aula</h2>
+                        <div class="card-content">
+                            <p>Horário: <span id="nextClassTime">19:00 - 20:00</span></p>
+                            <p>Dia: <span id="nextClassDay">Segunda-feira</span></p>
+                            <p>Faixa: <span id="nextClassLevel">Branca</span></p>
+                            <p>Professor: <span id="nextClassTeacher">Mestre Silva</span></p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2><i class="fas fa-chart-line"></i> Frequência</h2>
+                        <div class="card-content">
+                            <p>Presenças este mês: <span id="monthlyAttendance">8</span></p>
+                            <p>Total de aulas: <span id="totalClasses">10</span></p>
+                            <p>Taxa de presença: <span id="attendanceRate">80%</span></p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2><i class="fas fa-money-bill-wave"></i> Pagamentos</h2>
+                        <div class="card-content">
+                            <p>Próximo vencimento: <span id="nextPayment">01/06/2024</span></p>
+                            <p>Valor: <span id="paymentAmount">R$ 150,00</span></p>
+                            <p>Status: <span id="paymentStatus" class="badge success">Pago</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="aulas" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-calendar-alt"></i> Horários das Aulas</h2>
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Horário</th>
+                                <th>Faixa</th>
+                                <th>Professor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="frequencia" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-check-circle"></i> Histórico de Frequência</h2>
+                    <ul class="attendance-list" id="attendanceList">
+                        <!-- Preenchido via JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <div id="pagamentos" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-credit-card"></i> Histórico de Pagamentos</h2>
+                    <ul class="payment-history" id="paymentHistory">
+                        <!-- Preenchido via JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <div id="contato" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-envelope"></i> Enviar Mensagem para Administração</h2>
+                    <div class="card-content">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="messageSubject">Assunto</label>
+                                <input type="text" id="messageSubject" required
+                                    style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 15px;">
+                            </div>
+                            <div class="form-group">
+                                <label for="messageContent">Mensagem</label>
+                                <textarea id="messageContent" rows="5" required
+                                    style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 15px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">
+                                <i class="fas fa-paper-plane"></i> Enviar Mensagem
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-history"></i> Histórico de Mensagens</h2>
+                    <ul class="attendance-list" id="messageHistory">
+                        <!-- Preenchido via JavaScript -->
+                        <li>
+                            <div>
+                                <strong>Dúvida sobre horários</strong>
+                                <p>Enviada em: 10/05/2023</p>
+                            </div>
+                            <span class="badge warning">Aguardando resposta</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Detectar tema do dispositivo
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Monitorar mudanças no tema do sistema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+
+        // Funções de navegação
+        function openTab(tabId) {
+            // Esconder todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remover classe ativa de todas as abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar o conteúdo selecionado
+            document.getElementById(tabId).classList.add('active');
+
+            // Adicionar classe ativa à aba clicada
+            document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Carregar dados do usuário
+        function loadUserData() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const userFaixa = localStorage.getItem('userFaixa') || 'Branca';
+
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('userFullName').textContent = userName;
+
+                // Iniciais para o avatar
+                const initials = userName.split(' ').map(n => n[0]).join('');
+                document.getElementById('userAvatar').textContent = initials;
+            }
+
+            if (userEmail) {
+                document.getElementById('userEmail').textContent = userEmail;
+            }
+
+            // Atualizar informações do card de próxima aula
+            const nextClassLevel = document.getElementById('nextClassLevel');
+            if (nextClassLevel) {
+                nextClassLevel.textContent = userFaixa;
+            }
+
+            // Atualizar faixa na seção de perfil
+            document.getElementById('userFaixaDisplay').textContent = `Faixa ${userFaixa}`;
+
+            // Carregar informações da assinatura
+            const assinaturaStr = localStorage.getItem('assinatura');
+            if (assinaturaStr) {
+                try {
+                    const assinatura = JSON.parse(assinaturaStr);
+                    document.getElementById('planoAtual').textContent = assinatura.plano_nome || 'Mensal';
+                    document.getElementById('dataVencimento').textContent = new Date(assinatura.data_fim).toLocaleDateString();
+                    document.getElementById('nextPayment').textContent = new Date(assinatura.data_fim).toLocaleDateString();
+                    document.getElementById('paymentAmount').textContent = `R$ ${parseFloat(assinatura.valor).toFixed(2)}`;
+                } catch (error) {
+                    console.error('Erro ao carregar assinatura:', error);
+                }
+            }
+        }
+
+        // Verificar login
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userFaixa');
+            localStorage.removeItem('userType');
+            localStorage.removeItem('assinatura');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar horários
+        async function loadSchedule() {
+            const userFaixa = localStorage.getItem('userFaixa') || 'Branca';
+            const scheduleTableBody = document.getElementById('scheduleTableBody');
+
+            try {
+                const response = await fetch('api.php?endpoint=horarios');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar horários');
+                }
+
+                const horarios = data.horarios.filter(horario =>
+                    horario.faixa === userFaixa || horario.faixa === 'Todas'
+                );
+
+                if (horarios.length > 0) {
+                    scheduleTableBody.innerHTML = horarios.map(horario => `
+                        <tr>
+                            <td>${horario.dia_semana}</td>
+                            <td>${horario.horario_inicio.substring(0, 5)} - ${horario.horario_fim.substring(0, 5)}</td>
+                            <td>${horario.faixa}</td>
+                            <td>${horario.professor_nome || 'Não definido'}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    scheduleTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Nenhum horário disponível para sua faixa.</td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                const horarios = [
+                    { dia: 'Segunda', horario: '19:00 - 20:00', faixa: userFaixa, professor: 'Mestre Silva' },
+                    { dia: 'Quarta', horario: '19:00 - 20:00', faixa: userFaixa, professor: 'Mestre Silva' },
+                    { dia: 'Sexta', horario: '19:00 - 20:00', faixa: userFaixa, professor: 'Mestre Silva' }
+                ];
+
+                scheduleTableBody.innerHTML = horarios.map(horario => `
+                        <tr>
+                            <td>${horario.dia}</td>
+                            <td>${horario.horario}</td>
+                            <td>${horario.faixa}</td>
+                            <td>${horario.professor}</td>
+                        </tr>
+                    `).join('');
+            }
+        }
+
+        // Carregar frequência
+        async function loadAttendance() {
+            const userId = localStorage.getItem('userId');
+            const attendanceList = document.getElementById('attendanceList');
+
+            try {
+                const response = await fetch(`api.php?endpoint=frequencia&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar frequência');
+                }
+
+                if (data.frequencia && data.frequencia.length > 0) {
+                    attendanceList.innerHTML = data.frequencia.map(freq => `
+                            <li>
+                                <div>
+                                    <strong>${freq.dia_semana}, ${new Date(freq.data_presenca).toLocaleDateString()}</strong>
+                                    <p>${freq.horario_inicio.substring(0, 5)} - ${freq.horario_fim.substring(0, 5)}</p>
+                                </div>
+                                <span class="badge success">Presente</span>
+                            </li>
+                        `).join('');
+
+                    // Atualizar estatísticas de frequência
+                    const thisMonth = new Date().getMonth();
+                    const presencasDoMes = data.frequencia.filter(freq =>
+                        new Date(freq.data_presenca).getMonth() === thisMonth
+                    ).length;
+
+                    document.getElementById('monthlyAttendance').textContent = presencasDoMes;
+                    document.getElementById('totalClasses').textContent = '12';
+
+                    const taxa = Math.round((presencasDoMes / 12) * 100);
+                    document.getElementById('attendanceRate').textContent = `${taxa}%`;
+                    document.querySelector('.progress').style.width = `${taxa}%`;
+                } else {
+                    attendanceList.innerHTML = '<li>Nenhum registro de frequência encontrado.</li>';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                attendanceList.innerHTML = `
+                        <li>
+                            <div>
+                                <strong>Segunda-feira, 15/05/2023</strong>
+                                <p>19:00 - 20:00</p>
+                            </div>
+                            <span class="badge success">Presente</span>
+                        </li>
+                        <li>
+                            <div>
+                                <strong>Quarta-feira, 17/05/2023</strong>
+                                <p>19:00 - 20:00</p>
+                            </div>
+                            <span class="badge success">Presente</span>
+                        </li>
+                        <li>
+                            <div>
+                                <strong>Sexta-feira, 19/05/2023</strong>
+                                <p>19:00 - 20:00</p>
+                            </div>
+                            <span class="badge success">Presente</span>
+                        </li>
+                    `;
+            }
+        }
+
+        // Carregar pagamentos
+        async function loadPayments() {
+            const userId = localStorage.getItem('userId');
+            const paymentHistory = document.getElementById('paymentHistory');
+
+            try {
+                const response = await fetch(`api.php?endpoint=pagamentos&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar pagamentos');
+                }
+
+                if (data.pagamentos && data.pagamentos.length > 0) {
+                    paymentHistory.innerHTML = data.pagamentos.map(pagamento => `
+                            <li>
+                                <div>
+                                    <strong>${pagamento.plano_nome}</strong>
+                                    <p>${new Date(pagamento.data_pagamento).toLocaleDateString()}</p>
+                                </div>
+                                <div>
+                                    <span>R$ ${parseFloat(pagamento.valor).toFixed(2)}</span>
+                                    <span class="badge ${pagamento.status === 'Pago' ? 'success' : 'warning'}">${pagamento.status}</span>
+                                </div>
+                            </li>
+                        `).join('');
+                } else {
+                    paymentHistory.innerHTML = '<li>Nenhum registro de pagamento encontrado.</li>';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                paymentHistory.innerHTML = `
+                        <li>
+                            <div>
+                                <strong>Plano Mensal</strong>
+                                <p>01/05/2023</p>
+                            </div>
+                            <div>
+                                <span>R$ 150,00</span>
+                                <span class="badge success">Pago</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <strong>Plano Mensal</strong>
+                                <p>01/04/2023</p>
+                            </div>
+                            <div>
+                                <span>R$ 150,00</span>
+                                <span class="badge success">Pago</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <strong>Plano Mensal</strong>
+                                <p>01/03/2023</p>
+                            </div>
+                            <div>
+                                <span>R$ 150,00</span>
+                                <span class="badge success">Pago</span>
+                            </div>
+                        </li>
+                    `;
+            }
+        }
+
+        // Verificar se o usuário está logado e tem assinatura ativa
+        async function verificarAcesso() {
+            const userId = localStorage.getItem('userId');
+            const userType = localStorage.getItem('userType');
+
+            if (!userId || userType !== 'aluno') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`api.php?endpoint=verificar-assinatura&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao verificar assinatura');
+                }
+
+                if (data.tem_assinatura) {
+                    // Atualizar informações da assinatura no localStorage
+                    localStorage.setItem('assinatura', JSON.stringify(data.assinatura));
+
+                    // Mostrar dashboard
+                    document.getElementById('dashboard-content').style.display = 'block';
+                    document.getElementById('sem-assinatura').style.display = 'none';
+
+                    // Carregar dados do dashboard
+                    loadUserData();
+                    loadSchedule();
+                    loadAttendance();
+                    loadPayments();
+                    loadMessageHistory();
+                } else {
+                    // Mostrar página de seleção de planos
+                    document.getElementById('dashboard-content').style.display = 'none';
+                    document.getElementById('sem-assinatura').style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao verificar assinatura');
+
+                // Para fins de demonstração, mostrar o dashboard mesmo com erro
+                document.getElementById('dashboard-content').style.display = 'block';
+                document.getElementById('sem-assinatura').style.display = 'none';
+
+                loadUserData();
+                loadSchedule();
+                loadAttendance();
+                loadPayments();
+                loadMessageHistory();
+            }
+        }
+
+        // Função para selecionar um plano
+        function selecionarPlano(planoId) {
+            localStorage.setItem('planoSelecionado', planoId);
+            window.location.href = `pagamento.html?plano=${planoId}`;
+        }
+
+        // Função para enviar mensagem para o administrador
+        document.getElementById('contactForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const userId = localStorage.getItem('userId');
+            const titulo = document.getElementById('messageSubject').value;
+            const mensagem = document.getElementById('messageContent').value;
+
+            if (!userId) {
+                alert('Você precisa estar logado para enviar mensagens.');
+                return;
+            }
+
+            try {
+                const response = await fetch('api.php?endpoint=enviar-notificacao', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario_id: userId,
+                        titulo: titulo,
+                        mensagem: mensagem
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Mensagem enviada com sucesso!');
+                    document.getElementById('contactForm').reset();
+                    loadMessageHistory(); // Recarregar histórico de mensagens
+                } else {
+                    throw new Error(data.error || 'Erro ao enviar mensagem');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar mensagem. Por favor, tente novamente mais tarde.');
+            }
+        });
+
+        // Função para carregar histórico de mensagens
+        async function loadMessageHistory() {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`api.php?endpoint=notificacoes&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar mensagens');
+                }
+
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = '';
+
+                if (data.notificacoes && data.notificacoes.length > 0) {
+                    data.notificacoes.forEach(notificacao => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                    <div>
+                        <strong>${notificacao.titulo}</strong>
+                        <p>Enviada em: ${new Date(notificacao.data_envio).toLocaleDateString()}</p>
+                    </div>
+                    <span class="badge ${notificacao.lida ? 'success' : 'warning'}">
+                        ${notificacao.lida ? 'Respondida' : 'Aguardando resposta'}
+                    </span>
+                `;
+                        messageHistory.appendChild(li);
+                    });
+                } else {
+                    messageHistory.innerHTML = '<li>Nenhuma mensagem enviada.</li>';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = `
+            <li>
+                <div>
+                    <strong>Dúvida sobre horários</strong>
+                    <p>Enviada em: ${new Date().toLocaleDateString()}</p>
+                </div>
+                <span class="badge warning">Aguardando resposta</span>
+            </li>
+        `;
+            }
+        }
+
+        // Função para carregar histórico de mensagens
+        async function loadMessageHistory() {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`api.php?endpoint=listar-mensagens&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar mensagens');
+                }
+
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = '';
+
+                if (data.mensagens && data.mensagens.length > 0) {
+                    data.mensagens.forEach(mensagem => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                    <div>
+                        <strong>${mensagem.assunto}</strong>
+                        <p>Enviada em: ${new Date(mensagem.data_envio).toLocaleDateString()}</p>
+                    </div>
+                    <span class="badge ${mensagem.respondida ? 'success' : 'warning'}">
+                        ${mensagem.respondida ? 'Respondida' : 'Aguardando resposta'}
+                    </span>
+                `;
+                        messageHistory.appendChild(li);
+                    });
+                } else {
+                    messageHistory.innerHTML = '<li>Nenhuma mensagem enviada.</li>';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = `
+            <li>
+                <div>
+                    <strong>Dúvida sobre horários</strong>
+                    <p>Enviada em: ${new Date().toLocaleDateString()}</p>
+                </div>
+                <span class="badge warning">Aguardando resposta</span>
+            </li>
+        `;
+            }
+        }
+
+        // Função para carregar histórico de mensagens
+        async function loadMessageHistory() {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`api.php?endpoint=notificacoes&usuario_id=${userId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao carregar mensagens');
+                }
+
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = '';
+
+                if (data.notificacoes && data.notificacoes.length > 0) {
+                    data.notificacoes.forEach(notificacao => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                                <div>
+                                    <strong>${notificacao.titulo}</strong>
+                                    <p>Enviada em: ${new Date(notificacao.data_envio).toLocaleDateString()}</p>
+                                </div>
+                                <span class="badge ${notificacao.lida ? 'success' : 'warning'}">
+                                    ${notificacao.lida ? 'Respondida' : 'Aguardando resposta'}
+                                </span>
+                            `;
+                        messageHistory.appendChild(li);
+                    });
+                } else {
+                    messageHistory.innerHTML = '<li>Nenhuma mensagem enviada.</li>';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+
+                // Dados simulados para demonstração
+                const messageHistory = document.getElementById('messageHistory');
+                messageHistory.innerHTML = `
+                        <li>
+                            <div>
+                                <strong>Dúvida sobre horários</strong>
+                                <p>Enviada em: 10/05/2023</p>
+                            </div>
+                            <span class="badge warning">Aguardando resposta</span>
+                        </li>
+                        <li>
+                            <div>
+                                <strong>Problema com pagamento</strong>
+                                <p>Enviada em: 05/05/2023</p>
+                            </div>
+                            <span class="badge success">Respondida</span>
+                        </li>
+                    `;
+            }
+        }
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function () {
+            detectSystemTheme();
+            verificarAcesso();
+        });
+    </script>
+</body>
+
+</html>

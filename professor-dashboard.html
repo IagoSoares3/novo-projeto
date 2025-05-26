@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Professor - ART OF FIGHT</title>
+    <style>
+        :root {
+            --primary-color: #FF4D4D;
+            --secondary-color: #1A1A1A;
+            --accent-color: #FFD700;
+            --background-light: #FFFFFF;
+            --text-light: #333333;
+            --background-dark: #1a1a1a;
+            --text-dark: #FFFFFF;
+            --card-light: #FFFFFF;
+            --card-dark: #2a2a2a;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logout-btn:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        .dashboard {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-light);
+            position: relative;
+            background: var(--card-light);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dark-mode .tab {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .dark-mode .tab:hover:not(.active) {
+            background: rgba(255, 77, 77, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .dashboard-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-card h3 i {
+            font-size: 1.4rem;
+        }
+
+        .class-list {
+            margin-top: 20px;
+        }
+
+        .class-item {
+            background: rgba(255, 77, 77, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .class-item {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .class-item:hover {
+            background: rgba(255, 77, 77, 0.1);
+            transform: translateX(5px);
+        }
+
+        .dark-mode .class-item:hover {
+            background: rgba(255, 77, 77, 0.2);
+        }
+
+        .class-info {
+            flex: 1;
+        }
+
+        .class-time {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .class-level {
+            font-size: 0.9em;
+            color: var(--text-light);
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .dark-mode .class-level {
+            color: var(--text-dark);
+        }
+
+        .attendance-list {
+            margin-top: 20px;
+        }
+
+        .attendance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .attendance-item {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .attendance-item:hover {
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .dark-mode .attendance-item:hover {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .attendance-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: var(--text-light);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+        }
+
+        .btn-info {
+            background: var(--info-color);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.present {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status.absent {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .status.pending {
+            background: var(--warning-color);
+            color: var(--text-light);
+        }
+
+        .level-stats {
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .stat-item {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .dark-mode .progress-bar {
+            background: #444;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .student-list {
+            margin-top: 20px;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .student-item {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .student-item:hover {
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .dark-mode .student-item:hover {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .student-details h4 {
+            margin-bottom: 5px;
+        }
+
+        .student-details p {
+            font-size: 0.9em;
+            color: var(--text-light);
+            opacity: 0.8;
+        }
+
+        .dark-mode .student-details p {
+            color: var(--text-dark);
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .search-bar input {
+            background: var(--card-dark);
+            color: var(--text-dark);
+            border-color: #444;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .search-bar .btn {
+            padding: 10px 20px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-option {
+            padding: 8px 15px;
+            background: var(--card-light);
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .dark-mode .filter-option {
+            background: var(--card-dark);
+            border-color: #444;
+        }
+
+        .filter-option.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .filter-option:hover:not(.active) {
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .dark-mode .filter-option:hover:not(.active) {
+            background: rgba(255, 77, 77, 0.2);
+        }
+
+        .chart {
+            width: 100%;
+            position: relative;
+        }
+
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .attendance-card {
+            background: var(--card-light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .attendance-card {
+            background: var(--card-dark);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .attendance-card.present {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 1px var(--success-color);
+        }
+
+        .attendance-card.absent {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 1px var(--danger-color);
+        }
+
+        .attendance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .attendance-card h4 {
+            margin: 10px 0 5px;
+            font-size: 1rem;
+        }
+
+        .attendance-card p {
+            font-size: 0.9em;
+            color: var(--text-light);
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .attendance-card p {
+            color: var(--text-dark);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-light);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .dark-mode .modal-content {
+            background: var(--card-dark);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .close-modal {
+            color: var(--text-dark);
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .form-group input,
+        .dark-mode .form-group select,
+        .dark-mode .form-group textarea {
+            background: var(--background-dark);
+            color: var(--text-dark);
+            border-color: #444;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Melhorias na responsividade da tabela de horários */
+        @media (max-width: 768px) {
+            .schedule-table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .schedule-table th,
+            .schedule-table td {
+                white-space: nowrap;
+                padding: 8px;
+            }
+
+            .student-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .student-actions button {
+                width: 100%;
+            }
+
+            .attendance-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+
+        /* Melhorias adicionais para telas muito pequenas */
+        @media (max-width: 480px) {
+            .filter-options {
+                flex-wrap: wrap;
+            }
+
+            .filter-option {
+                flex: 0 0 calc(50% - 10px);
+                margin-bottom: 10px;
+            }
+
+            .dashboard-card h3 {
+                font-size: 1rem;
+            }
+
+            .student-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .student-actions {
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar input,
+            .search-bar select,
+            .search-bar button {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+        }
+
+        /* Melhorias específicas para a tabela de horários */
+        .schedule-table-container {
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+
+        .schedule-table {
+            min-width: 600px;
+            /* Garante um tamanho mínimo para a tabela */
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-fist-raised"></i>
+                    ART OF FIGHT
+                </div>
+                <div class="nav-links">
+                    <span id="professorName">Professor</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            <div class="tabs">
+                <div class="tab active" onclick="openTab('dashboard-tab')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </div>
+                <div class="tab" onclick="openTab('classes-tab')">
+                    <i class="fas fa-calendar-alt"></i> Aulas
+                </div>
+                <div class="tab" onclick="openTab('students-tab')">
+                    <i class="fas fa-users"></i> Alunos
+                </div>
+                <div class="tab" onclick="openTab('attendance-tab')">
+                    <i class="fas fa-clipboard-check"></i> Frequência
+                </div>
+                <div class="tab" onclick="openTab('reports-tab')">
+                    <i class="fas fa-chart-bar"></i> Relatórios
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-users"></i> Total de Alunos</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin: 15px 0;">42</div>
+                        <div
+                            style="display: flex; justify-content: space-between; color: var(--text-light); opacity: 0.8;">
+                            <span>Ativos: 38</span>
+                            <span>Inativos: 4</span>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-calendar-check"></i> Aulas Esta Semana</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin: 15px 0;">15</div>
+                        <div
+                            style="display: flex; justify-content: space-between; color: var(--text-light); opacity: 0.8;">
+                            <span>Realizadas: 8</span>
+                            <span>Pendentes: 7</span>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-chart-line"></i> Taxa de Presença</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin: 15px 0;">87%</div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 87%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-chart-area"></i> Frequência Mensal</h3>
+                    <div class="chart" style="height: 300px;">
+                        <canvas id="attendanceChartCanvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-calendar-day"></i> Próximas Aulas</h3>
+                        <div class="class-list">
+                            <div class="class-item">
+                                <div class="class-info">
+                                    <div class="class-time">Hoje, 19:00 - 20:00</div>
+                                    <div class="class-level">Faixa Branca e Amarela</div>
+                                </div>
+                                <button class="btn"
+                                    onclick="openAttendanceModal('Hoje, 19:00 - 20:00', 'Faixa Branca e Amarela')">
+                                    <i class="fas fa-clipboard-check"></i> Frequência
+                                </button>
+                            </div>
+                            <div class="class-item">
+                                <div class="class-info">
+                                    <div class="class-time">Hoje, 20:00 - 21:00</div>
+                                    <div class="class-level">Faixa Azul e Roxa</div>
+                                </div>
+                                <button class="btn"
+                                    onclick="openAttendanceModal('Hoje, 20:00 - 21:00', 'Faixa Azul e Roxa')">
+                                    <i class="fas fa-clipboard-check"></i> Frequência
+                                </button>
+                            </div>
+                            <div class="class-item">
+                                <div class="class-info">
+                                    <div class="class-time">Amanhã, 19:00 - 20:00</div>
+                                    <div class="class-level">Faixa Verde e Laranja</div>
+                                </div>
+                                <button class="btn"
+                                    onclick="openAttendanceModal('Amanhã, 19:00 - 20:00', 'Faixa Verde e Laranja')">
+                                    <i class="fas fa-clipboard-check"></i> Frequência
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-medal"></i> Distribuição por Faixa</h3>
+                        <div class="level-stats">
+                            <div class="stat-item">
+                                <span>Faixa Branca</span>
+                                <span>15</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Amarela</span>
+                                <span>8</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Laranja</span>
+                                <span>6</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Verde</span>
+                                <span>5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Azul</span>
+                                <span>4</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Roxa</span>
+                                <span>2</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Marrom</span>
+                                <span>1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Faixa Preta</span>
+                                <span>1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classes Tab -->
+            <div id="classes-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Gerenciamento de Aulas</h2>
+                    <button class="btn" onclick="openNewClassModal()">
+                        <i class="fas fa-plus"></i> Nova Aula
+                    </button>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-calendar-week"></i> Horários de Aulas</h3>
+                    <div class="schedule-table-container">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Horário</th>
+                                    <th>Faixa</th>
+                                    <th>Alunos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Segunda</td>
+                                    <td>19:00 - 20:00</td>
+                                    <td>Branca e Amarela</td>
+                                    <td>15</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Segunda, 19:00 - 20:00', 'Branca e Amarela')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Segunda</td>
+                                    <td>20:00 - 21:00</td>
+                                    <td>Azul e Roxa</td>
+                                    <td>12</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Segunda, 20:00 - 21:00', 'Azul e Roxa')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Terça</td>
+                                    <td>19:00 - 20:00</td>
+                                    <td>Verde e Laranja</td>
+                                    <td>10</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Terça, 19:00 - 20:00', 'Verde e Laranja')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quarta</td>
+                                    <td>19:00 - 20:00</td>
+                                    <td>Branca e Amarela</td>
+                                    <td>14</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Quarta, 19:00 - 20:00', 'Branca e Amarela')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quarta</td>
+                                    <td>20:00 - 21:00</td>
+                                    <td>Azul e Roxa</td>
+                                    <td>11</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Quarta, 20:00 - 21:00', 'Azul e Roxa')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sexta</td>
+                                    <td>19:00 - 20:00</td>
+                                    <td>Todas as faixas</td>
+                                    <td>20</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-info"
+                                                onclick="openAttendanceModal('Sexta, 19:00 - 20:00', 'Todas as faixas')">
+                                                <i class="fas fa-clipboard-check"></i> Frequência
+                                            </button>
+                                            <button class="btn">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="students-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Gerenciamento de Alunos</h2>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" placeholder="Buscar aluno por nome...">
+                    <select>
+                        <option value="">Todas as faixas</option>
+                        <option value="Branca">Faixa Branca</option>
+                        <option value="Amarela">Faixa Amarela</option>
+                        <option value="Laranja">Faixa Laranja</option>
+                        <option value="Verde">Faixa Verde</option>
+                        <option value="Azul">Faixa Azul</option>
+                        <option value="Roxa">Faixa Roxa</option>
+                        <option value="Marrom">Faixa Marrom</option>
+                        <option value="Preta">Faixa Preta</option>
+                    </select>
+                    <button class="btn">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+
+                <div class="filter-options">
+                    <div class="filter-option active">Todos</div>
+                    <div class="filter-option">Ativos</div>
+                    <div class="filter-option">Inativos</div>
+                    <div class="filter-option">Novos</div>
+                    <div class="filter-option">Pendentes de Avaliação</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="student-list">
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="student-avatar">JS</div>
+                                <div class="student-details">
+                                    <h4>João da Silva</h4>
+                                    <p>Faixa Branca • Desde 01/05/2023</p>
+                                </div>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-info" onclick="viewStudentDetails(1)">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn" onclick="openEvaluationModal(1, 'João da Silva')">
+                                    <i class="fas fa-star"></i> Avaliar
+                                </button>
+                                <button class="btn btn-warning"
+                                    onclick="openPromoteModal(1, 'João da Silva', 'Branca')">
+                                    <i class="fas fa-level-up-alt"></i> Promover
+                                </button>
+                            </div>
+                        </div>
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="student-avatar">MS</div>
+                                <div class="student-details">
+                                    <h4>Maria Santos</h4>
+                                    <p>Faixa Amarela • Desde 15/03/2023</p>
+                                </div>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-info" onclick="viewStudentDetails(2)">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn" onclick="openEvaluationModal(2, 'Maria Santos')">
+                                    <i class="fas fa-star"></i> Avaliar
+                                </button>
+                                <button class="btn btn-warning"
+                                    onclick="openPromoteModal(2, 'Maria Santos', 'Amarela')">
+                                    <i class="fas fa-level-up-alt"></i> Promover
+                                </button>
+                            </div>
+                        </div>
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="student-avatar">PO</div>
+                                <div class="student-details">
+                                    <h4>Pedro Oliveira</h4>
+                                    <p>Faixa Verde • Desde 10/01/2023</p>
+                                </div>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-info" onclick="viewStudentDetails(3)">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn" onclick="openEvaluationModal(3, 'Pedro Oliveira')">
+                                    <i class="fas fa-star"></i> Avaliar
+                                </button>
+                                <button class="btn btn-warning"
+                                    onclick="openPromoteModal(3, 'Pedro Oliveira', 'Verde')">
+                                    <i class="fas fa-level-up-alt"></i> Promover
+                                </button>
+                            </div>
+                        </div>
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="student-avatar">AC</div>
+                                <div class="student-details">
+                                    <h4>Ana Costa</h4>
+                                    <p>Faixa Azul • Desde 05/12/2022</p>
+                                </div>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-info" onclick="viewStudentDetails(4)">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn" onclick="openEvaluationModal(4, 'Ana Costa')">
+                                    <i class="fas fa-star"></i> Avaliar
+                                </button>
+                                <button class="btn btn-warning" onclick="openPromoteModal(4, 'Ana Costa', 'Azul')">
+                                    <i class="fas fa-level-up-alt"></i> Promover
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div id="attendance-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Registro de Frequência</h2>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-calendar-check"></i> Aulas de Hoje</h3>
+                    <div class="class-list">
+                        <div class="class-item">
+                            <div class="class-info">
+                                <div class="class-time">19:00 - 20:00</div>
+                                <div class="class-level">Faixa Branca e Amarela</div>
+                            </div>
+                            <button class="btn"
+                                onclick="openAttendanceModal('Hoje, 19:00 - 20:00', 'Faixa Branca e Amarela')">
+                                <i class="fas fa-clipboard-check"></i> Registrar Frequência
+                            </button>
+                        </div>
+                        <div class="class-item">
+                            <div class="class-info">
+                                <div class="class-time">20:00 - 21:00</div>
+                                <div class="class-level">Faixa Azul e Roxa</div>
+                            </div>
+                            <button class="btn"
+                                onclick="openAttendanceModal('Hoje, 20:00 - 21:00', 'Faixa Azul e Roxa')">
+                                <i class="fas fa-clipboard-check"></i> Registrar Frequência
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-history"></i> Histórico de Frequência</h3>
+                    <div class="attendance-list">
+                        <div class="attendance-item">
+                            <div>
+                                <strong>Segunda, 15/05/2023</strong> - 19:00 às 20:00
+                                <div>Faixa Branca e Amarela</div>
+                            </div>
+                            <button class="btn btn-info">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                        </div>
+                        <div class="attendance-item">
+                            <div>
+                                <strong>Segunda, 15/05/2023</strong> - 20:00 às 21:00
+                                <div>Faixa Azul e Roxa</div>
+                            </div>
+                            <button class="btn btn-info">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                        </div>
+                        <div class="attendance-item">
+                            <div>
+                                <strong>Sexta, 12/05/2023</strong> - 19:00 às 20:00
+                                <div>Todas as faixas</div>
+                            </div>
+                            <button class="btn btn-info">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                        </div>
+                        <div class="attendance-item">
+                            <div>
+                                <strong>Quarta, 10/05/2023</strong> - 19:00 às 20:00
+                                <div>Faixa Branca e Amarela</div>
+                            </div>
+                            <button class="btn btn-info">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                        </div>
+                        <div class="attendance-item">
+                            <div>
+                                <strong>Quarta, 10/05/2023</strong> - 20:00 às 21:00
+                                <div>Faixa Azul e Roxa</div>
+                            </div>
+                            <button class="btn btn-info">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Relatórios e Estatísticas</h2>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-chart-line"></i> Frequência Mensal</h3>
+                        <div class="chart" style="height: 300px;">
+                            <canvas id="attendanceChartCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-chart-pie"></i> Distribuição por Faixa</h3>
+                        <div class="chart" style="height: 300px;">
+                            <canvas id="beltDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-user-plus"></i> Evolução de Alunos</h3>
+                        <div class="chart" style="height: 300px;">
+                            <canvas id="studentGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-percentage"></i> Taxa de Frequência por Aula</h3>
+                        <div class="chart" style="height: 300px;">
+                            <canvas id="attendanceRateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Attendance Modal -->
+    <div id="attendanceModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('attendanceModal')">&times;</span>
+            <h2>Registro de Frequência</h2>
+            <p id="attendanceClassInfo">Aula: </p>
+            <div id="attendanceModalGrid" class="attendance-grid">
+                <div class="attendance-card present" data-student-id="1" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">JS</div>
+                    <h4>João da Silva</h4>
+                    <p>Faixa Branca</p>
+                    <div class="status present">Presente</div>
+                </div>
+                <div class="attendance-card present" data-student-id="2" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">MS</div>
+                    <h4>Maria Santos</h4>
+                    <p>Faixa Amarela</p>
+                    <div class="status present">Presente</div>
+                </div>
+                <div class="attendance-card present" data-student-id="3" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">PO</div>
+                    <h4>Pedro Oliveira</h4>
+                    <p>Faixa Verde</p>
+                    <div class="status present">Presente</div>
+                </div>
+                <div class="attendance-card present" data-student-id="4" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">AC</div>
+                    <h4>Ana Costa</h4>
+                    <p>Faixa Azul</p>
+                    <div class="status present">Presente</div>
+                </div>
+                <div class="attendance-card present" data-student-id="5" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">LP</div>
+                    <h4>Lucas Pereira</h4>
+                    <p>Faixa Branca</p>
+                    <div class="status present">Presente</div>
+                </div>
+                <div class="attendance-card present" data-student-id="6" onclick="toggleAttendance(this)">
+                    <div class="student-avatar">JL</div>
+                    <h4>Julia Lima</h4>
+                    <p>Faixa Amarela</p>
+                    <div class="status present">Presente</div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn" onclick="closeModal('attendanceModal')">Cancelar</button>
+                <button class="btn btn-success" onclick="saveAttendance()">Salvar Frequência</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Class Modal -->
+    <div id="newClassModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('newClassModal')">&times;</span>
+            <h2>Nova Aula</h2>
+            <form id="newClassForm">
+                <div class="form-group">
+                    <label for="classDay">Dia da Semana</label>
+                    <select id="classDay" required>
+                        <option value="">Selecione</option>
+                        <option value="Segunda">Segunda-feira</option>
+                        <option value="Terça">Terça-feira</option>
+                        <option value="Quarta">Quarta-feira</option>
+                        <option value="Quinta">Quinta-feira</option>
+                        <option value="Sexta">Sexta-feira</option>
+                        <option value="Sábado">Sábado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classStartTime">Horário de Início</label>
+                    <input type="time" id="classStartTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="classEndTime">Horário de Término</label>
+                    <input type="time" id="classEndTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="classBelt">Faixa</label>
+                    <select id="classBelt" required>
+                        <option value="">Selecione</option>
+                        <option value="Branca">Faixa Branca</option>
+                        <option value="Amarela">Faixa Amarela</option>
+                        <option value="Laranja">Faixa Laranja</option>
+                        <option value="Verde">Faixa Verde</option>
+                        <option value="Azul">Faixa Azul</option>
+                        <option value="Roxa">Faixa Roxa</option>
+                        <option value="Marrom">Faixa Marrom</option>
+                        <option value="Preta">Faixa Preta</option>
+                        <option value="Todas">Todas as faixas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classCapacity">Capacidade</label>
+                    <input type="number" id="classCapacity" min="1" value="20" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('newClassModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Criar Aula</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Evaluation Modal -->
+    <div id="evaluationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('evaluationModal')">&times;</span>
+            <h2 id="evaluationStudentName">Avaliação de Aluno</h2>
+            <form id="evaluationForm">
+                <div class="form-group">
+                    <label for="evaluationDate">Data da Avaliação</label>
+                    <input type="date" id="evaluationDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="technicalScore">Nota Técnica (1-10)</label>
+                    <input type="number" id="technicalScore" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="disciplineScore">Nota de Disciplina (1-10)</label>
+                    <input type="number" id="disciplineScore" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="attendanceScore">Nota de Frequência (1-10)</label>
+                    <input type="number" id="attendanceScore" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="evaluationComments">Comentários</label>
+                    <textarea id="evaluationComments" rows="4"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('evaluationModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar Avaliação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Promote Modal -->
+    <div id="promoteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('promoteModal')">&times;</span>
+            <h2 id="promoteStudentInfo">Promover Aluno</h2>
+            <form id="promoteForm">
+                <div class="form-group">
+                    <label for="currentBelt">Faixa Atual</label>
+                    <input type="text" id="currentBelt" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="newBelt">Nova Faixa</label>
+                    <select id="newBelt" required>
+                        <!-- Opções serão preenchidas dinamicamente -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="promoteDate">Data da Promoção</label>
+                    <input type="date" id="promoteDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="promoteComments">Comentários</label>
+                    <textarea id="promoteComments" rows="4"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('promoteModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar Promoção</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Details Modal -->
+    <div id="studentDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('studentDetailsModal')">&times;</span>
+            <h2>Detalhes do Aluno</h2>
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <h3>Informações Pessoais</h3>
+                    <p><strong>Nome:</strong> João da Silva</p>
+                    <p><strong>Email:</strong> joao.silva@email.com</p>
+                    <p><strong>Telefone:</strong> (11) 98765-4321</p>
+                    <p><strong>Data de Nascimento:</strong> 15/05/1995</p>
+                    <p><strong>Endereço:</strong> Rua das Flores, 123 - São Paulo, SP</p>
+                </div>
+                <div style="flex: 1;">
+                    <h3>Informações da Academia</h3>
+                    <p><strong>Faixa Atual:</strong> Branca</p>
+                    <p><strong>Data de Início:</strong> 01/05/2023</p>
+                    <p><strong>Plano:</strong> Mensal</p>
+                    <p><strong>Status:</strong> Ativo</p>
+                    <p><strong>Última Avaliação:</strong> Não realizada</p>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Histórico de Frequência</h3>
+                <div class="attendance-list">
+                    <div class="attendance-item">
+                        <div>
+                            <strong>15/05/2023</strong> - Segunda, 19:00 às 20:00
+                        </div>
+                        <span class="status present">Presente</span>
+                    </div>
+                    <div class="attendance-item">
+                        <div>
+                            <strong>12/05/2023</strong> - Sexta, 19:00 às 20:00
+                        </div>
+                        <span class="status present">Presente</span>
+                    </div>
+                    <div class="attendance-item">
+                        <div>
+                            <strong>10/05/2023</strong> - Quarta, 19:00 às 20:00
+                        </div>
+                        <span class="status absent">Ausente</span>
+                    </div>
+                    <div class="attendance-item">
+                        <div>
+                            <strong>08/05/2023</strong> - Segunda, 19:00 às 20:00
+                        </div>
+                        <span class="status present">Presente</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn" onclick="closeModal('studentDetailsModal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Detectar tema do dispositivo
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Monitorar mudanças no tema do sistema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+
+        // Funções de navegação
+        function openTab(tabId) {
+            // Esconder todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remover classe ativa de todas as abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar o conteúdo selecionado
+            document.getElementById(tabId).classList.add('active');
+
+            // Adicionar classe ativa à aba clicada
+            document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Funções de modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function (event) {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (event.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        }
+
+        // Funções específicas
+        function openAttendanceModal(classTime, classLevel) {
+            document.getElementById('attendanceClassInfo').textContent = `Aula: ${classTime} - ${classLevel}`;
+            openModal('attendanceModal');
+        }
+
+        function openNewClassModal() {
+            openModal('newClassModal');
+        }
+
+        function openEvaluationModal(studentId, studentName) {
+            document.getElementById('evaluationStudentName').textContent = `Avaliação de ${studentName}`;
+            document.getElementById('evaluationDate').value = new Date().toISOString().split('T')[0];
+            openModal('evaluationModal');
+        }
+
+        function openPromoteModal(studentId, studentName, currentBelt) {
+            document.getElementById('promoteStudentInfo').textContent = `Promover ${studentName}`;
+            document.getElementById('currentBelt').value = currentBelt;
+            document.getElementById('promoteDate').value = new Date().toISOString().split('T')[0];
+
+            // Preencher opções de faixa
+            const newBeltSelect = document.getElementById('newBelt');
+            newBeltSelect.innerHTML = '';
+
+            const belts = ['Branca', 'Amarela', 'Laranja', 'Verde', 'Azul', 'Roxa', 'Marrom', 'Preta'];
+            const currentIndex = belts.indexOf(currentBelt);
+
+            if (currentIndex < belts.length - 1) {
+                for (let i = currentIndex + 1; i < belts.length; i++) {
+                    const option = document.createElement('option');
+                    option.value = belts[i];
+                    option.textContent = `Faixa ${belts[i]}`;
+                    newBeltSelect.appendChild(option);
+                }
+            }
+
+            openModal('promoteModal');
+        }
+
+        function viewStudentDetails(studentId) {
+            openModal('studentDetailsModal');
+        }
+
+        // Alternar presença/ausência
+        function toggleAttendance(card) {
+            if (card.classList.contains('present')) {
+                card.classList.remove('present');
+                card.classList.add('absent');
+                card.querySelector('.status').textContent = 'Ausente';
+                card.querySelector('.status').className = 'status absent';
+
+                // Definir data como 00-00-0000 quando marcar como ausente
+                const studentId = card.getAttribute('data-student-id');
+                // Aqui você enviaria para o servidor a atualização com data 00-00-0000
+                console.log(`Aluno ${studentId} marcado como ausente. Data de presença: 00-00-0000`);
+            } else {
+                card.classList.remove('absent');
+                card.classList.add('present');
+                card.querySelector('.status').textContent = 'Presente';
+                card.querySelector('.status').className = 'status present';
+
+                // Definir data atual quando marcar como presente
+                const studentId = card.getAttribute('data-student-id');
+                const currentDate = new Date().toISOString().split('T')[0];
+                // Aqui você enviaria para o servidor a atualização com a data atual
+                console.log(`Aluno ${studentId} marcado como presente. Data de presença: ${currentDate}`);
+            }
+        }
+
+        // Salvar frequência
+        function saveAttendance() {
+            // Coletar dados de frequência
+            const attendanceData = [];
+            const cards = document.querySelectorAll('#attendanceModalGrid .attendance-card');
+            const classInfo = document.getElementById('attendanceClassInfo').textContent;
+            const classMatch = classInfo.match(/Aula: (.+) - (.+)/);
+            
+            if (!classMatch) {
+                alert('Erro ao identificar informações da aula');
+                return;
+            }
+            
+            const classTime = classMatch[1];
+            const classLevel = classMatch[2];
+            
+            // Encontrar o horário_id com base nas informações da aula
+            let horarioId = null;
+            // Extrair dia da semana e horário
+            const dayTimeMatch = classTime.match(/(Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo)(?:,)?\s+(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
+            
+            if (dayTimeMatch) {
+                const diaSemana = dayTimeMatch[1];
+                const horarioInicio = dayTimeMatch[2];
+                
+                // Aqui você pode definir um mapeamento de horários ou usar um valor fixo para testes
+                switch (diaSemana) {
+                    case 'Segunda':
+                        horarioId = horarioInicio === '19:00' ? 1 : 2;
+                        break;
+                    case 'Terça':
+                        horarioId = 3;
+                        break;
+                    case 'Quarta':
+                        horarioId = horarioInicio === '19:00' ? 4 : 5;
+                        break;
+                    case 'Quinta':
+                        horarioId = 6;
+                        break;
+                    case 'Sexta':
+                        horarioId = 7;
+                        break;
+                    case 'Sábado':
+                        horarioId = 8;
+                        break;
+                    default:
+                        horarioId = 1; // Valor padrão
+                }
+            } else {
+                // Se não conseguir extrair do formato esperado, use um valor padrão
+                horarioId = 1;
+            }
+        
+            // Apenas incluir alunos presentes
+            cards.forEach(card => {
+                const studentId = card.getAttribute('data-student-id');
+                const isPresent = card.classList.contains('present');
+                
+                // Apenas adicionar alunos presentes
+                if (isPresent) {
+                    attendanceData.push({
+                        studentId,
+                        horarioId
+                    });
+                }
+            });
+        
+            // Enviar dados para o servidor
+            fetch('api.php?endpoint=salvar-frequencia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    attendanceData: attendanceData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Frequência registrada com sucesso!');
+                    closeModal('attendanceModal');
+                } else {
+                    alert('Erro ao registrar frequência: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao registrar frequência. Verifique o console para mais detalhes.');
+            });
+        }        
+
+        // Verificar login
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+
+            if (isLoggedIn !== 'true' || userType !== 'professor') {
+                window.location.href = 'login.html';
+            } else {
+                const professorName = localStorage.getItem('userName');
+                if (professorName) {
+                    document.getElementById('professorName').textContent = professorName;
+                }
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userType');
+            window.location.href = 'login.html';
+        }
+
+        // Inicializar gráficos
+        function initCharts() {
+            // Gráfico de frequência
+            const attendanceCtx = document.getElementById('attendanceChartCanvas').getContext('2d');
+            const attendanceChart = new Chart(attendanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Taxa de Presença (%)',
+                        data: [75, 82, 78, 85, 87, 90],
+                        backgroundColor: 'rgba(255, 77, 77, 0.2)',
+                        borderColor: 'rgba(255, 77, 77, 1)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de distribuição por faixa
+            const beltCtx = document.getElementById('beltDistributionChart').getContext('2d');
+            const beltChart = new Chart(beltCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Branca', 'Amarela', 'Laranja', 'Verde', 'Azul', 'Roxa', 'Marrom', 'Preta'],
+                    datasets: [{
+                        data: [15, 8, 6, 5, 4, 2, 1, 1],
+                        backgroundColor: [
+                            '#FFFFFF',
+                            '#FFD700',
+                            '#FFA500',
+                            '#008000',
+                            '#0000FF',
+                            '#800080',
+                            '#8B4513',
+                            '#000000'
+                        ],
+                        borderColor: '#333',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Gráfico de evolução de alunos
+            const growthCtx = document.getElementById('studentGrowthChart').getContext('2d');
+            const growthChart = new Chart(growthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Novos Alunos',
+                        data: [5, 7, 4, 8, 10, 8],
+                        backgroundColor: 'rgba(255, 77, 77, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de taxa de frequência por aula
+            const rateCtx = document.getElementById('attendanceRateChart').getContext('2d');
+            const rateChart = new Chart(rateCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Segunda 19h', 'Segunda 20h', 'Terça 19h', 'Quarta 19h', 'Quarta 20h', 'Sexta 19h'],
+                    datasets: [{
+                        label: 'Taxa de Presença (%)',
+                        data: [92, 85, 78, 88, 82, 95],
+                        backgroundColor: 'rgba(255, 77, 77, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Inicializar formulários
+        document.getElementById('newClassForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Aula criada com sucesso!');
+            closeModal('newClassModal');
+        });
+
+        document.getElementById('evaluationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Avaliação registrada com sucesso!');
+            closeModal('evaluationModal');
+        });
+
+        document.getElementById('promoteForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Aluno promovido com sucesso!');
+            closeModal('promoteModal');
+        });
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function () {
+            detectSystemTheme();
+            checkLogin();
+            initCharts();
+        });
+    </script>
+</body>
+
+</html>

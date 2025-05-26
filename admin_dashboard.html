@@ -1,0 +1,4056 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - ART OF FIGHT</title>
+    <style>
+        :root {
+            --primary-color: #FF4D4D;
+            --secondary-color: #1A1A1A;
+            --accent-color: #FFD700;
+            --background-light: #FFFFFF;
+            --text-light: #333333;
+            --background-dark: #1a1a1a;
+            --text-dark: #FFFFFF;
+            --card-light: #FFFFFF;
+            --card-dark: #2a2a2a;
+            --input-light: #f5f5f5;
+            --input-dark: #333333;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--accent-color);
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--card-light);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .dark-mode .header {
+            background: var(--card-dark);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .card {
+            background: var(--card-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .card-label {
+            color: #aaa;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .data-table {
+            background: var(--card-dark);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dark-mode .data-table th,
+        .dark-mode .data-table td {
+            border-color: #333;
+        }
+
+        .data-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status.active {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status.inactive {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .status.pending {
+            background: var(--warning-color);
+            color: black;
+        }
+
+        .status.read {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .status.unread {
+            background: var(--warning-color);
+            color: black;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .action-btn.edit {
+            background: var(--info-color);
+        }
+
+        .action-btn.delete {
+            background: var(--danger-color);
+        }
+
+        .action-btn.view {
+            background: var(--success-color);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--card-light);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .dark-mode .tab-btn {
+            background: var(--card-dark);
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .search-input {
+            background-color: var(--input-dark);
+            border-color: #444;
+            color: var(--text-dark);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .pagination-btn {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-light);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .dark-mode .pagination-btn {
+            background: var(--card-dark);
+            border-color: #444;
+            color: var(--text-dark);
+        }
+
+        .pagination-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn:not(.disabled):hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination-ellipsis {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-light);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            width: 500px;
+            max-width: 90%;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        .dark-mode .modal-content {
+            background: var(--card-dark);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-group label {
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .form-group input,
+        .dark-mode .form-group select,
+        .dark-mode .form-group textarea {
+            background-color: var(--input-dark);
+            border-color: #444;
+            color: var(--text-dark);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .notification-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .notification-item {
+            border-color: #333;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .notification-item.unread {
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--text-light);
+        }
+
+        .dark-mode .notification-content h3 {
+            color: var(--text-dark);
+        }
+
+        .notification-content p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .dark-mode .notification-content p {
+            color: #aaa;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #sidebarOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            display: none;
+        }
+
+        #sidebarOverlay.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 100;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .header {
+                margin-top: 50px;
+            }
+
+            .notification-item.from-aluno {
+                border-left: 3px solid var(--info-color);
+                background-color: rgba(23, 162, 184, 0.05);
+            }
+
+            .notification-sender {
+                font-weight: bold;
+                color: var(--info-color);
+                margin-left: 10px;
+            }
+
+            .notification-meta {
+                display: flex;
+                align-items: center;
+                font-size: 0.8rem;
+                color: #999;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="sidebarOverlay"></div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>ART OF FIGHT</h2>
+            <p>Painel Administrativo</p>
+        </div>
+        <div class="menu">
+            <a href="#" class="menu-item active" onclick="switchTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('alunos')">
+                <i class="fas fa-user-graduate"></i>
+                <span>Alunos</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('professores')">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Professores</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('planos')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Planos</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('horarios')">
+                <i class="fas fa-clock"></i>
+                <span>Horários</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('pagamentos')">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Pagamentos</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('notificacoes')">
+                <i class="fas fa-bell"></i>
+                <span>Notificações</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('relatorios')">
+                <i class="fas fa-chart-bar"></i>
+                <span>Relatórios</span>
+            </a>
+            <a href="#" class="menu-item" onclick="switchTab('configuracoes')">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="user-info">
+                <span id="userName">Administrador</span>
+                <button class="btn" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboardTab">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Total de Alunos</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalAlunos">0</div>
+                    <div class="card-label">Alunos ativos</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Total de Professores</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalProfessores">0</div>
+                    <div class="card-label">Professores ativos</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Receita Mensal</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="receitaMensal">R$ 0,00</div>
+                    <div class="card-label">Mês atual</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Assinaturas Ativas</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="assinaturasAtivas">0</div>
+                    <div class="card-label">Assinaturas ativas</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Últimos Alunos Cadastrados</h2>
+                    <button class="btn" onclick="switchTab('alunos')">Ver Todos</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Faixa</th>
+                            <th>Data de Cadastro</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ultimosAlunosTableBody">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Últimos Pagamentos</h2>
+                    <button class="btn" onclick="switchTab('pagamentos')">Ver Todos</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Aluno</th>
+                            <th>Plano</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ultimosPagamentosTableBody">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Alunos Tab -->
+        <div class="tab-content" id="alunosTab">
+            <div class="section-header">
+                <h2>Gerenciar Alunos</h2>
+                <button class="btn" onclick="openAddAlunoModal()">
+                    <i class="fas fa-plus"></i> Adicionar Aluno
+                </button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="alunosSearchInput" placeholder="Buscar alunos...">
+                <button class="btn" onclick="searchAlunos()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Faixa</th>
+                        <th>Data de Cadastro</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="alunosTableBody">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination" id="alunosPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Professores Tab -->
+        <div class="tab-content" id="professoresTab">
+            <div class="section-header">
+                <h2>Gerenciar Professores</h2>
+                <button class="btn" onclick="openAddProfessorModal()">
+                    <i class="fas fa-plus"></i> Adicionar Professor
+                </button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="professoresSearchInput" placeholder="Buscar professores...">
+                <button class="btn" onclick="searchProfessores()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Faixa</th>
+                        <th>Especialidade</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="professoresTableBody">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination" id="professoresPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Planos Tab -->
+        <div class="tab-content" id="planosTab">
+            <div class="section-header">
+                <h2>Gerenciar Planos</h2>
+                <button class="btn" onclick="openAddPlanoModal()">
+                    <i class="fas fa-plus"></i> Adicionar Plano
+                </button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="planosSearchInput" placeholder="Buscar planos...">
+                <button class="btn" onclick="searchPlanos()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Duração (meses)</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="planosTableBody">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination" id="planosPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Horários Tab -->
+        <div class="tab-content" id="horariosTab">
+            <div class="section-header">
+                <h2>Gerenciar Horários</h2>
+                <button class="btn" onclick="openAddHorarioModal()">
+                    <i class="fas fa-plus"></i> Adicionar Horário
+                </button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="horariosSearchInput" placeholder="Buscar horários...">
+                <button class="btn" onclick="searchHorarios()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dia</th>
+                        <th>Horário</th>
+                        <th>Faixa</th>
+                        <th>Professor</th>
+                        <th>Vagas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="horariosTableBody">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination" id="horariosPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagamentos Tab -->
+        <div class="tab-content" id="pagamentosTab">
+            <div class="section-header">
+                <h2>Gerenciar Pagamentos</h2>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="pagamentosSearchInput" placeholder="Buscar pagamentos...">
+                <button class="btn" onclick="searchPagamentos()">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Aluno</th>
+                        <th>Plano</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="pagamentosTableBody">
+                    <!-- Preenchido via JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination" id="pagamentosPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Notificações Tab -->
+        <div class="tab-content" id="notificacoesTab">
+            <div class="section-header">
+                <h2>Gerenciar Notificações</h2>
+                <button class="btn" onclick="openAddNotificacaoModal()">
+                    <i class="fas fa-plus"></i> Nova Notificação
+                </button>
+            </div>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="loadNotificacoes('todas')">Todas</button>
+                <button class="tab-btn" onclick="loadNotificacoes('nao-lidas')">Não Lidas</button>
+                <button class="tab-btn" onclick="loadNotificacoes('enviadas')">Enviadas</button>
+            </div>
+
+            <ul class="notification-list" id="notificacoesList">
+                <!-- Preenchido via JavaScript -->
+            </ul>
+
+            <div class="pagination" id="notificacoesPagination">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Relatórios Tab -->
+        <div class="tab-content" id="relatoriosTab">
+            <div class="tab-content" id="relatoriosTab">
+                <div class="section-header">
+                    <h2>Relatórios</h2>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Receita</h2>
+                            <select id="receitaPeriodo" onchange="loadReceitaChart()">
+                                <option value="mensal">Mensal</option>
+                                <option value="trimestral">Trimestral</option>
+                                <option value="anual">Anual</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="receitaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Alunos por Faixa</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="alunosFaixaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Frequência</h2>
+                            <select id="frequenciaPeriodo" onchange="loadFrequenciaChart()">
+                                <option value="semanal">Semanal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="trimestral">Trimestral</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="frequenciaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Assinaturas por Plano</h2>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="assinaturasChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configurações Tab -->
+        <div class="tab-content" id="configuracoesTab">
+            <div class="section-header">
+                <h2>Configurações</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Configurações Gerais</h2>
+                </div>
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="nomeAcademia">Nome da Academia</label>
+                        <input type="text" id="nomeAcademia" value="ART OF FIGHT">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailContato">Email de Contato</label>
+                        <input type="email" id="emailContato" value="contato@artoffight.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefoneContato">Telefone de Contato</label>
+                        <input type="text" id="telefoneContato" value="(11) 99396-7438">
+                    </div>
+                    <div class="form-group">
+                        <label for="enderecoAcademia">Endereço</label>
+                        <input type="text" id="enderecoAcademia" value="Rua das Águas, 123 - Centro">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">Salvar Configurações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Aluno -->
+    <div id="addAlunoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addAlunoModal')">&times;</span>
+            <h2>Adicionar Novo Aluno</h2>
+            <form id="addAlunoForm">
+                <div class="form-group">
+                    <label for="alunoNome">Nome</label>
+                    <input type="text" id="alunoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="alunoEmail">Email</label>
+                    <input type="email" id="alunoEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="alunoSenha">Senha</label>
+                    <input type="password" id="alunoSenha" required>
+                </div>
+                <div class="form-group">
+                    <label for="alunoFaixa">Faixa</label>
+                    <select id="alunoFaixa" required>
+                        <option value="Branca">Branca</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Laranja">Laranja</option>
+                        <option value="Verde">Verde</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Roxa">Roxa</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Preta">Preta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="alunoStatus">Status</label>
+                    <select id="alunoStatus" required>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('addAlunoModal')">Cancelar</button>
+                    <button type="submit" class="btn">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Aluno -->
+    <div id="editAlunoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('editAlunoModal')">&times;</span>
+            <h2>Editar Aluno</h2>
+            <form id="editAlunoForm">
+                <input type="hidden" id="editAlunoId">
+                <div class="form-group">
+                    <label for="editAlunoNome">Nome</label>
+                    <input type="text" id="editAlunoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAlunoEmail">Email</label>
+                    <input type="email" id="editAlunoEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAlunoFaixa">Faixa</label>
+                    <select id="editAlunoFaixa" required>
+                        <option value="Branca">Branca</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Laranja">Laranja</option>
+                        <option value="Verde">Verde</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Roxa">Roxa</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Preta">Preta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editAlunoStatus">Status</label>
+                    <select id="editAlunoStatus" required>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('editAlunoModal')">Cancelar</button>
+                    <button type="submit" class="btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Professor -->
+    <div id="addProfessorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addProfessorModal')">&times;</span>
+            <h2>Adicionar Novo Professor</h2>
+            <form id="addProfessorForm">
+                <div class="form-group">
+                    <label for="professorNome">Nome</label>
+                    <input type="text" id="professorNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="professorEmail">Email</label>
+                    <input type="email" id="professorEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="professorSenha">Senha</label>
+                    <input type="password" id="professorSenha" required>
+                </div>
+                <div class="form-group">
+                    <label for="professorFaixa">Faixa</label>
+                    <select id="professorFaixa" required>
+                        <option value="Preta">Preta</option>
+                        <option value="Marrom">Marrom</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="professorGrau">Grau</label>
+                    <select id="professorGrau" required>
+                        <option value="1">1º Dan</option>
+                        <option value="2">2º Dan</option>
+                        <option value="3">3º Dan</option>
+                        <option value="4">4º Dan</option>
+                        <option value="5">5º Dan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="professorEspecialidade">Especialidade</label>
+                    <input type="text" id="professorEspecialidade">
+                </div>
+                <div class="form-group">
+                    <label for="professorStatus">Status</label>
+                    <select id="professorStatus" required>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('addProfessorModal')">Cancelar</button>
+                    <button type="submit" class="btn">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Professor -->
+    <div id="editProfessorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('editProfessorModal')">&times;</span>
+            <h2>Editar Professor</h2>
+            <form id="editProfessorForm">
+                <input type="hidden" id="editProfessorId">
+                <div class="form-group">
+                    <label for="editProfessorNome">Nome</label>
+                    <input type="text" id="editProfessorNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProfessorEmail">Email</label>
+                    <input type="email" id="editProfessorEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProfessorFaixa">Faixa</label>
+                    <select id="editProfessorFaixa" required>
+                        <option value="Preta">Preta</option>
+                        <option value="Marrom">Marrom</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editProfessorGrau">Grau</label>
+                    <select id="editProfessorGrau" required>
+                        <option value="1">1º Dan</option>
+                        <option value="2">2º Dan</option>
+                        <option value="3">3º Dan</option>
+                        <option value="4">4º Dan</option>
+                        <option value="5">5º Dan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editProfessorEspecialidade">Especialidade</label>
+                    <input type="text" id="editProfessorEspecialidade">
+                </div>
+                <div class="form-group">
+                    <label for="editProfessorStatus">Status</label>
+                    <select id="editProfessorStatus" required>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('editProfessorModal')">Cancelar</button>
+                    <button type="submit" class="btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Plano -->
+    <div id="addPlanoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addPlanoModal')">&times;</span>
+            <h2>Adicionar Novo Plano</h2>
+            <form id="addPlanoForm">
+                <div class="form-group">
+                    <label for="planoNome">Nome</label>
+                    <input type="text" id="planoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="planoDescricao">Descrição</label>
+                    <textarea id="planoDescricao" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="planoValor">Valor (R$)</label>
+                    <input type="number" id="planoValor" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="planoDuracao">Duração (meses)</label>
+                    <input type="number" id="planoDuracao" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="planoBeneficios">Benefícios (separados por vírgula)</label>
+                    <textarea id="planoBeneficios" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('addPlanoModal')">Cancelar</button>
+                    <button type="submit" class="btn">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Plano -->
+    <div id="editPlanoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('editPlanoModal')">&times;</span>
+            <h2>Editar Plano</h2>
+            <form id="editPlanoForm">
+                <input type="hidden" id="editPlanoId">
+                <div class="form-group">
+                    <label for="editPlanoNome">Nome</label>
+                    <input type="text" id="editPlanoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPlanoDescricao">Descrição</label>
+                    <textarea id="editPlanoDescricao" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editPlanoValor">Valor (R$)</label>
+                    <input type="number" id="editPlanoValor" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPlanoDuracao">Duração (meses)</label>
+                    <input type="number" id="editPlanoDuracao" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPlanoBeneficios">Benefícios (separados por vírgula)</label>
+                    <textarea id="editPlanoBeneficios" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('editPlanoModal')">Cancelar</button>
+                    <button type="submit" class="btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Horário -->
+    <div id="addHorarioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addHorarioModal')">&times;</span>
+            <h2>Adicionar Novo Horário</h2>
+            <form id="addHorarioForm">
+                <div class="form-group">
+                    <label for="horarioDia">Dia da Semana</label>
+                    <select id="horarioDia" required>
+                        <option value="Segunda">Segunda-feira</option>
+                        <option value="Terça">Terça-feira</option>
+                        <option value="Quarta">Quarta-feira</option>
+                        <option value="Quinta">Quinta-feira</option>
+                        <option value="Sexta">Sexta-feira</option>
+                        <option value="Sábado">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="horarioInicio">Horário de Início</label>
+                    <input type="time" id="horarioInicio" required>
+                </div>
+                <div class="form-group">
+                    <label for="horarioFim">Horário de Término</label>
+                    <input type="time" id="horarioFim" required>
+                </div>
+                <div class="form-group">
+                    <label for="horarioFaixa">Faixa</label>
+                    <select id="horarioFaixa" required>
+                        <option value="Todas">Todas</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Laranja">Laranja</option>
+                        <option value="Verde">Verde</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Roxa">Roxa</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Preta">Preta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="horarioProfessor">Professor</label>
+                    <select id="horarioProfessor" required>
+                        <!-- Preenchido via JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="horarioVagas">Vagas</label>
+                    <input type="number" id="horarioVagas" min="1" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('addHorarioModal')">Cancelar</button>
+                    <button type="submit" class="btn">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Editar Horário -->
+    <div id="editHorarioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('editHorarioModal')">&times;</span>
+            <h2>Editar Horário</h2>
+            <form id="editHorarioForm">
+                <input type="hidden" id="editHorarioId">
+                <div class="form-group">
+                    <label for="editHorarioDia">Dia da Semana</label>
+                    <select id="editHorarioDia" required>
+                        <option value="Segunda">Segunda-feira</option>
+                        <option value="Terça">Terça-feira</option>
+                        <option value="Quarta">Quarta-feira</option>
+                        <option value="Quinta">Quinta-feira</option>
+                        <option value="Sexta">Sexta-feira</option>
+                        <option value="Sábado">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editHorarioInicio">Horário de Início</label>
+                    <input type="time" id="editHorarioInicio" required>
+                </div>
+                <div class="form-group">
+                    <label for="editHorarioFim">Horário de Término</label>
+                    <input type="time" id="editHorarioFim" required>
+                </div>
+                <div class="form-group">
+                    <label for="editHorarioFaixa">Faixa</label>
+                    <select id="editHorarioFaixa" required>
+                        <option value="Todas">Todas</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Laranja">Laranja</option>
+                        <option value="Verde">Verde</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Roxa">Roxa</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Preta">Preta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editHorarioProfessor">Professor</label>
+                    <select id="editHorarioProfessor" required>
+                        <!-- Preenchido via JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editHorarioVagas">Vagas</label>
+                    <input type="number" id="editHorarioVagas" min="1" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('editHorarioModal')">Cancelar</button>
+                    <button type="submit" class="btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Notificação -->
+    <div id="addNotificacaoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addNotificacaoModal')">&times;</span>
+            <h2>Nova Notificação</h2>
+            <form id="addNotificacaoForm">
+                <div class="form-group">
+                    <label for="notificacaoTitulo">Título</label>
+                    <input type="text" id="notificacaoTitulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="notificacaoMensagem">Mensagem</label>
+                    <textarea id="notificacaoMensagem" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="notificacaoTipo">Tipo</label>
+                    <select id="notificacaoTipo" onchange="toggleDestinatarioSelect()" required>
+                        <option value="todos">Todos os Alunos</option>
+                        <option value="professores">Todos os Professores</option>
+                        <option value="individual">Usuário Específico</option>
+                    </select>
+                </div>
+                <div class="form-group" id="destinatarioSelectGroup" style="display: none;">
+                    <label for="notificacaoDestinatario">Destinatário</label>
+                    <select id="notificacaoDestinatario">
+                        <!-- Preenchido via JavaScript -->
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="closeModal('addNotificacaoModal')">Cancelar</button>
+                    <button type="submit" class="btn">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Visualizar Notificação -->
+    <div id="viewNotificacaoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('viewNotificacaoModal')">&times;</span>
+            <h2 id="viewNotificacaoTitulo"></h2>
+            <div class="form-group">
+                <label>Mensagem:</label>
+                <p id="viewNotificacaoMensagem"></p>
+            </div>
+            <div class="form-group">
+                <label>Data de Envio:</label>
+                <p id="viewNotificacaoData"></p>
+            </div>
+            <div class="form-group">
+                <label id="viewNotificacaoRemetenteLabel">Remetente:</label>
+                <p id="viewNotificacaoRemetente"></p>
+            </div>
+            <div class="form-group" id="viewNotificacaoDestinatarioContainer">
+                <label>Destinatário:</label>
+                <p id="viewNotificacaoDestinatario"></p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn" onclick="closeModal('viewNotificacaoModal')">Fechar</button>
+                <button type="button" class="btn" id="marcarLidaBtn" onclick="marcarNotificacaoComoLida()">Marcar como
+                    Lida</button>
+                <button type="button" class="btn" id="responderBtn" onclick="responderNotificacao()">Responder</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Variáveis globais
+        let currentTab = 'dashboard';
+        let alunosData = [];
+        let professoresData = [];
+        let planosData = [];
+        let horariosData = [];
+        let pagamentosData = [];
+        let notificacoesData = [];
+        let currentAlunosPage = 1;
+        let currentProfessoresPage = 1;
+        let currentPlanosPage = 1;
+        let currentHorariosPage = 1;
+        let currentPagamentosPage = 1;
+        let currentNotificacoesPage = 1;
+        let itemsPerPage = 10;
+        let currentNotificacaoId = null;
+        let receitaChart = null;
+        let alunosFaixaChart = null;
+        let frequenciaChart = null;
+        let assinaturasChart = null;
+
+        // Verificar login
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userType = localStorage.getItem('userType');
+
+            if (isLoggedIn !== 'true' || userType !== 'admin') {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Carregar dados do usuário
+        function loadUserData() {
+            const userName = localStorage.getItem('userName');
+
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userType');
+            window.location.href = 'index.html';
+        }
+
+        // Alternar tema
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Detectar tema do sistema
+        function detectSystemTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Alternar sidebar em dispositivos móveis
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Fechar sidebar ao clicar no overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function () {
+            const sidebar = document.querySelector('.sidebar');
+
+            sidebar.classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // Alternar entre abas
+        function switchTab(tab) {
+            // Atualizar abas ativas
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            document.querySelector(`.menu-item[onclick="switchTab('${tab}')"]`).classList.add('active');
+
+            // Atualizar título da página
+            const pageTitle = document.getElementById('pageTitle');
+            pageTitle.textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+
+            currentTab = tab;
+
+            // Carregar dados específicos da aba
+            switch (tab) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'alunos':
+                    loadAlunos();
+                    break;
+                case 'professores':
+                    loadProfessores();
+                    break;
+                case 'planos':
+                    loadPlanos();
+                    break;
+                case 'horarios':
+                    loadHorarios();
+                    break;
+                case 'pagamentos':
+                    loadPagamentos();
+                    break;
+                case 'notificacoes':
+                    loadNotificacoes('todas');
+                    break;
+                case 'relatorios':
+                    loadRelatorios();
+                    break;
+            }
+
+            // Fechar sidebar em dispositivos móveis
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        }
+
+        // Mostrar overlay de carregamento
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // Esconder overlay de carregamento
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Abrir modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        // Fechar modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Fechar modais ao clicar fora
+        window.onclick = function (event) {
+            const modals = document.getElementsByClassName('modal');
+
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        };
+
+        // Formatar data
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        // Formatar hora
+        function formatTime(timeString) {
+            return timeString.substring(0, 5);
+        }
+
+        // Formatar valor monetário
+        function formatCurrency(value) {
+            return parseFloat(value).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+        }
+
+        // Carregar dados do dashboard
+        async function loadDashboardData() {
+            showLoading();
+
+            try {
+                // Carregar estatísticas
+                const statsResponse = await fetch('api.php?endpoint=dashboard-stats');
+                const statsData = await statsResponse.json();
+
+                if (statsData.success) {
+                    document.getElementById('totalAlunos').textContent = statsData.totalAlunos || 0;
+                    document.getElementById('totalProfessores').textContent = statsData.totalProfessores || 0;
+                    document.getElementById('receitaMensal').textContent = formatCurrency(statsData.receitaMensal || 0);
+                    document.getElementById('assinaturasAtivas').textContent = statsData.assinaturasAtivas || 0;
+                }
+
+                // Carregar últimos alunos
+                const alunosResponse = await fetch('api.php?endpoint=alunos?limit=5');
+                const alunosData = await alunosResponse.json();
+
+                if (alunosData.success) {
+                    const tableBody = document.getElementById('ultimosAlunosTableBody');
+                    tableBody.innerHTML = '';
+
+                    alunosData.data.forEach(aluno => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                    <td>${aluno.id}</td>
+                                    <td>${aluno.nome}</td>
+                                    <td>${aluno.email}</td>
+                                    <td>${aluno.faixa}</td>
+                                    <td>${formatDate(aluno.data_cadastro)}</td>
+                                    <td><span class="status ${aluno.status.toLowerCase()}">${aluno.status}</span></td>
+                                `;
+                        tableBody.appendChild(row);
+                    });
+                }
+
+                // Carregar últimos pagamentos
+                const pagamentosResponse = await fetch('api.php?endpoint=pagamentos?limit=5');
+                const pagamentosData = await pagamentosResponse.json();
+
+                if (pagamentosData.success) {
+                    const tableBody = document.getElementById('ultimosPagamentosTableBody');
+                    tableBody.innerHTML = '';
+
+                    pagamentosData.data.forEach(pagamento => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                    <td>${pagamento.id}</td>
+                                    <td>${pagamento.aluno_nome}</td>
+                                    <td>${pagamento.plano_nome}</td>
+                                    <td>${formatCurrency(pagamento.valor)}</td>
+                                    <td>${formatDate(pagamento.data_pagamento)}</td>
+                                    <td><span class="status ${pagamento.status.toLowerCase()}">${pagamento.status}</span></td>
+                                `;
+                        tableBody.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do dashboard:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar alunos
+        async function loadAlunos() {
+            showLoading();
+
+            try {
+                const response = await fetch('api.php?endpoint=alunos');
+                const data = await response.json();
+
+                if (data.success) {
+                    alunosData = data.data;
+                    renderAlunosTable();
+                    renderPagination(alunosData.length, currentAlunosPage, 'alunosPagination', 'changeAlunosPage');
+                } else {
+                    console.error('Erro ao carregar alunos:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar alunos:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar tabela de alunos
+        function renderAlunosTable() {
+            const tableBody = document.getElementById('alunosTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentAlunosPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = alunosData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(aluno => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${aluno.id}</td>
+                            <td>${aluno.nome}</td>
+                            <td>${aluno.email}</td>
+                            <td>${aluno.faixa}</td>
+                            <td>${formatDate(aluno.data_cadastro)}</td>
+                            <td><span class="status ${aluno.status.toLowerCase()}">${aluno.status}</span></td>
+                            <td>
+                                <button class="action-btn edit" onclick="editAluno(${aluno.id})"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete" onclick="deleteAluno(${aluno.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de alunos
+        function changeAlunosPage(page) {
+            currentAlunosPage = page;
+            renderAlunosTable();
+            renderPagination(alunosData.length, currentAlunosPage, 'alunosPagination', 'changeAlunosPage');
+        }
+
+        // Buscar alunos
+        function searchAlunos() {
+            const searchTerm = document.getElementById('alunosSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadAlunos();
+                return;
+            }
+
+            const filteredAlunos = alunosData.filter(aluno =>
+                aluno.nome.toLowerCase().includes(searchTerm) ||
+                aluno.email.toLowerCase().includes(searchTerm) ||
+                aluno.faixa.toLowerCase().includes(searchTerm)
+            );
+
+            alunosData = filteredAlunos;
+            currentAlunosPage = 1;
+            renderAlunosTable();
+            renderPagination(alunosData.length, currentAlunosPage, 'alunosPagination', 'changeAlunosPage');
+        }
+
+        // Abrir modal de adicionar aluno
+        function openAddAlunoModal() {
+            document.getElementById('addAlunoForm').reset();
+            openModal('addAlunoModal');
+        }
+
+        // Adicionar aluno
+        document.getElementById('addAlunoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const nome = document.getElementById('alunoNome').value;
+            const email = document.getElementById('alunoEmail').value;
+            const senha = document.getElementById('alunoSenha').value;
+            const faixa = document.getElementById('alunoFaixa').value;
+            const status = document.getElementById('alunoStatus').value;
+
+            try {
+                const response = await fetch('api.php?endpoint=alunos/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        email,
+                        senha,
+                        faixa,
+                        status
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('addAlunoModal');
+                    loadAlunos();
+                    alert('Aluno adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar aluno: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar aluno:', error);
+                alert('Erro ao adicionar aluno. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Editar aluno
+        async function editAluno(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=alunos/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const aluno = data.data;
+
+                    document.getElementById('editAlunoId').value = aluno.id;
+                    document.getElementById('editAlunoNome').value = aluno.nome;
+                    document.getElementById('editAlunoEmail').value = aluno.email;
+                    document.getElementById('editAlunoFaixa').value = aluno.faixa;
+                    document.getElementById('editAlunoStatus').value = aluno.status;
+
+                    openModal('editAlunoModal');
+                } else {
+                    alert('Erro ao carregar dados do aluno: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do aluno:', error);
+                alert('Erro ao carregar dados do aluno. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Atualizar aluno
+        document.getElementById('editAlunoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const id = document.getElementById('editAlunoId').value;
+            const nome = document.getElementById('editAlunoNome').value;
+            const email = document.getElementById('editAlunoEmail').value;
+            const faixa = document.getElementById('editAlunoFaixa').value;
+            const status = document.getElementById('editAlunoStatus').value;
+
+            try {
+                const response = await fetch(`api.php?endpoint=alunos/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        nome,
+                        email,
+                        faixa,
+                        status
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('editAlunoModal');
+                    loadAlunos();
+                    alert('Aluno atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar aluno: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar aluno:', error);
+                alert('Erro ao atualizar aluno. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Excluir aluno
+        async function deleteAluno(id) {
+            if (!confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita e removerá todas as assinaturas e pagamentos associados.')) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Primeiro, excluir todas as dependências do aluno
+                const deleteDepResponse = await fetch(`api.php?endpoint=usuarios/delete-dependencies`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario_id: id })
+                });
+
+                const depResult = await deleteDepResponse.json();
+                if (!depResult.success) {
+                    throw new Error('Erro ao excluir dependências do aluno: ' + depResult.error);
+                }
+
+                // Depois, excluir o aluno
+                const response = await fetch(`api.php?endpoint=alunos/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadAlunos();
+                    alert('Aluno excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir aluno: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir aluno:', error);
+                alert('Erro ao excluir aluno: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Excluir professor
+        async function deleteProfessor(id) {
+            if (!confirm('Tem certeza que deseja excluir este professor? Esta ação não pode ser desfeita e removerá todas as aulas e horários associados.')) {
+                return;
+            }
+
+            showLoading(); editAluno
+
+            try {
+                // Primeiro, excluir todas as dependências do professor
+                const deleteDepResponse = await fetch(`api.php?endpoint=professores/delete-dependencies`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ professor_id: id })
+                });
+
+                const depResult = await deleteDepResponse.json();
+                if (!depResult.success) {
+                    throw new Error('Erro ao excluir dependências do professor: ' + depResult.error);
+                }
+
+                // Depois, excluir o professor
+                const response = await fetch(`api.php?endpoint=professores/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadProfessores();
+                    alert('Professor excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir professor: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir professor:', error);
+                alert('Erro ao excluir professor: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar professores
+        async function loadProfessores() {
+            showLoading();
+
+            try {
+                const response = await fetch('api.php?endpoint=professores');
+                const data = await response.json();
+
+                if (data.success) {
+                    professoresData = data.data;
+                    renderProfessoresTable();
+                    renderPagination(professoresData.length, currentProfessoresPage, 'professoresPagination', 'changeProfessoresPage');
+                } else {
+                    console.error('Erro ao carregar professores:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar professores:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar tabela de professores
+        function renderProfessoresTable() {
+            const tableBody = document.getElementById('professoresTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentProfessoresPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = professoresData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(professor => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${professor.id}</td>
+                            <td>${professor.nome}</td>
+                            <td>${professor.email}</td>
+                            <td>${professor.faixa} ${professor.grau}º Dan</td>
+                            <td>${professor.especialidade || '-'}</td>
+                            <td><span class="status ${professor.status.toLowerCase()}">${professor.status}</span></td>
+                            <td>
+                                <button class="action-btn edit" onclick="editProfessor(${professor.id})"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete" onclick="deleteProfessor(${professor.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de professores
+        function changeProfessoresPage(page) {
+            currentProfessoresPage = page;
+            renderProfessoresTable();
+            renderPagination(professoresData.length, currentProfessoresPage, 'professoresPagination', 'changeProfessoresPage');
+        }
+
+        // Buscar professores
+        function searchProfessores() {
+            const searchTerm = document.getElementById('professoresSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadProfessores();
+                return;
+            }
+
+            const filteredProfessores = professoresData.filter(professor =>
+                professor.nome.toLowerCase().includes(searchTerm) ||
+                professor.email.toLowerCase().includes(searchTerm) ||
+                professor.especialidade?.toLowerCase().includes(searchTerm)
+            );
+
+            professoresData = filteredProfessores;
+            currentProfessoresPage = 1;
+            renderProfessoresTable();
+            renderPagination(professoresData.length, currentProfessoresPage, 'professoresPagination', 'changeProfessoresPage');
+        }
+
+        // Abrir modal de adicionar professor
+        function openAddProfessorModal() {
+            document.getElementById('addProfessorForm').reset();
+            openModal('addProfessorModal');
+        }
+
+        // Adicionar professor
+        document.getElementById('addProfessorForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const nome = document.getElementById('professorNome').value;
+            const email = document.getElementById('professorEmail').value;
+            const senha = document.getElementById('professorSenha').value;
+            const faixa = document.getElementById('professorFaixa').value;
+            const grau = document.getElementById('professorGrau').value;
+            const especialidade = document.getElementById('professorEspecialidade').value;
+            const status = document.getElementById('professorStatus').value;
+
+            try {
+                const response = await fetch('api.php?endpoint=professores/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        email,
+                        senha,
+                        faixa,
+                        grau,
+                        especialidade,
+                        status
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('addProfessorModal');
+                    loadProfessores();
+                    alert('Professor adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar professor: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar professor:', error);
+                alert('Erro ao adicionar professor. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Editar professor
+        async function editProfessor(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=professores/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const professor = data.data;
+
+                    document.getElementById('editProfessorId').value = professor.id;
+                    document.getElementById('editProfessorNome').value = professor.nome;
+                    document.getElementById('editProfessorEmail').value = professor.email;
+                    document.getElementById('editProfessorFaixa').value = professor.faixa;
+                    document.getElementById('editProfessorGrau').value = professor.grau;
+                    document.getElementById('editProfessorEspecialidade').value = professor.especialidade || '';
+                    document.getElementById('editProfessorStatus').value = professor.status;
+
+                    openModal('editProfessorModal');
+                } else {
+                    alert('Erro ao carregar dados do professor: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do professor:', error);
+                alert('Erro ao carregar dados do professor. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Atualizar professor
+        document.getElementById('editProfessorForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const id = document.getElementById('editProfessorId').value;
+            const nome = document.getElementById('editProfessorNome').value;
+            const email = document.getElementById('editProfessorEmail').value;
+            const faixa = document.getElementById('editProfessorFaixa').value;
+            const grau = document.getElementById('editProfessorGrau').value;
+            const especialidade = document.getElementById('editProfessorEspecialidade').value;
+            const status = document.getElementById('editProfessorStatus').value;
+
+            try {
+                const response = await fetch(`api.php?endpoint=professores/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        nome,
+                        email,
+                        faixa,
+                        grau,
+                        especialidade,
+                        status
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('editProfessorModal');
+                    loadProfessores();
+                    alert('Professor atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar professor: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar professor:', error);
+                alert('Erro ao atualizar professor. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Excluir professor
+        async function deleteProfessor(id) {
+            if (!confirm('Tem certeza que deseja excluir este professor?')) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=professores/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadProfessores();
+                    alert('Professor excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir professor: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir professor:', error);
+                alert('Erro ao excluir professor. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar paginação
+        function renderPagination(totalItems, currentPage, paginationId, changePageFunction) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById(paginationId);
+            pagination.innerHTML = '';
+
+            if (totalPages <= 1) {
+                return;
+            }
+
+            // Botão anterior
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('pagination-btn');
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    window[changePageFunction](currentPage - 1);
+                }
+            });
+            pagination.appendChild(prevButton);
+
+            // Páginas
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('pagination-btn');
+
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+
+                pageButton.textContent = i;
+                pageButton.addEventListener('click', () => {
+                    window[changePageFunction](i);
+                });
+                pagination.appendChild(pageButton);
+            }
+
+            // Botão próximo
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('pagination-btn');
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    window[changePageFunction](currentPage + 1);
+                }
+            });
+            pagination.appendChild(nextButton);
+        }
+
+        // Carregar planos
+        async function loadPlanos() {
+            showLoading();
+
+            try {
+                const response = await fetch('api.php?endpoint=planos');
+                const data = await response.json();
+
+                if (data.success) {
+                    planosData = data.data;
+                    renderPlanosTable();
+                    renderPagination(planosData.length, currentPlanosPage, 'planosPagination', 'changePlanosPage');
+                } else {
+                    console.error('Erro ao carregar planos:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar planos:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar tabela de planos
+        function renderPlanosTable() {
+            const tableBody = document.getElementById('planosTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentPlanosPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = planosData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(plano => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${plano.id}</td>
+                            <td>${plano.nome}</td>
+                            <td>${plano.descricao}</td>
+                            <td>${formatCurrency(plano.valor)}</td>
+                            <td>${plano.duracao_meses}</td>
+                            <td>
+                                <button class="action-btn edit" onclick="editPlano(${plano.id})"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete" onclick="deletePlano(${plano.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de planos
+        function changePlanosPage(page) {
+            currentPlanosPage = page;
+            renderPlanosTable();
+            renderPagination(planosData.length, currentPlanosPage, 'planosPagination', 'changePlanosPage');
+        }
+
+        // Buscar planos
+        function searchPlanos() {
+            const searchTerm = document.getElementById('planosSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadPlanos();
+                return;
+            }
+
+            const filteredPlanos = planosData.filter(plano =>
+                plano.nome.toLowerCase().includes(searchTerm) ||
+                plano.descricao.toLowerCase().includes(searchTerm)
+            );
+
+            planosData = filteredPlanos;
+            currentPlanosPage = 1;
+            renderPlanosTable();
+            renderPagination(planosData.length, currentPlanosPage, 'planosPagination', 'changePlanosPage');
+        }
+
+        // Abrir modal de adicionar plano
+        function openAddPlanoModal() {
+            document.getElementById('addPlanoForm').reset();
+            openModal('addPlanoModal');
+        }
+
+        // Adicionar plano
+        document.getElementById('addPlanoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const nome = document.getElementById('planoNome').value;
+            const descricao = document.getElementById('planoDescricao').value;
+            const valor = document.getElementById('planoValor').value;
+            const duracao_meses = document.getElementById('planoDuracao').value;
+            const beneficios = document.getElementById('planoBeneficios').value;
+
+            try {
+                const response = await fetch('api.php?endpoint=planos/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        descricao,
+                        valor,
+                        duracao_meses,
+                        beneficios
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('addPlanoModal');
+                    loadPlanos();
+                    alert('Plano adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar plano: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar plano:', error);
+                alert('Erro ao adicionar plano. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Editar plano
+        async function editPlano(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=planos/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const plano = data.data;
+
+                    document.getElementById('editPlanoId').value = plano.id;
+                    document.getElementById('editPlanoNome').value = plano.nome;
+                    document.getElementById('editPlanoDescricao').value = plano.descricao;
+                    document.getElementById('editPlanoValor').value = plano.valor;
+                    document.getElementById('editPlanoDuracao').value = plano.duracao_meses;
+                    document.getElementById('editPlanoBeneficios').value = plano.beneficios;
+
+                    openModal('editPlanoModal');
+                } else {
+                    alert('Erro ao carregar dados do plano: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do plano:', error);
+                alert('Erro ao carregar dados do plano. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Atualizar plano
+        document.getElementById('editPlanoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const id = document.getElementById('editPlanoId').value;
+            const nome = document.getElementById('editPlanoNome').value;
+            const descricao = document.getElementById('editPlanoDescricao').value;
+            const valor = document.getElementById('editPlanoValor').value;
+            const duracao_meses = document.getElementById('editPlanoDuracao').value;
+            const beneficios = document.getElementById('editPlanoBeneficios').value;
+
+            try {
+                const response = await fetch(`api.php?endpoint=planos/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        nome,
+                        descricao,
+                        valor,
+                        duracao_meses,
+                        beneficios
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('editPlanoModal');
+                    loadPlanos();
+                    alert('Plano atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar plano: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar plano:', error);
+                alert('Erro ao atualizar plano. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Excluir plano
+        async function deletePlano(id) {
+            if (!confirm('Tem certeza que deseja excluir este plano?')) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=planos/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadPlanos();
+                    alert('Plano excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir plano: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir plano:', error);
+                alert('Erro ao excluir plano. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar horários
+        async function loadHorarios() {
+            showLoading();
+
+            try {
+                const response = await fetch('api.php?endpoint=horarios');
+                const data = await response.json();
+
+                if (data.success) {
+                    horariosData = data.data;
+                    renderHorariosTable();
+                    renderPagination(horariosData.length, currentHorariosPage, 'horariosPagination', 'changeHorariosPage');
+
+                    // Carregar professores para os selects dos modais
+                    await loadProfessoresForSelect();
+                } else {
+                    console.error('Erro ao carregar horários:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar horários:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar professores para os selects
+        async function loadProfessoresForSelect() {
+            try {
+                const response = await fetch('api.php?endpoint=professores');
+                const data = await response.json();
+
+                if (data.success) {
+                    const professores = data.data;
+                    const addSelect = document.getElementById('horarioProfessor');
+                    const editSelect = document.getElementById('editHorarioProfessor');
+
+                    addSelect.innerHTML = '<option value="">Selecione um professor</option>';
+                    editSelect.innerHTML = '<option value="">Selecione um professor</option>';
+
+                    professores.forEach(professor => {
+                        if (professor.status === 'Ativo') {
+                            const option = document.createElement('option');
+                            option.value = professor.id;
+                            option.textContent = professor.nome;
+
+                            const optionClone = option.cloneNode(true);
+
+                            addSelect.appendChild(option);
+                            editSelect.appendChild(optionClone);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar professores para select:', error);
+            }
+        }
+
+        // Renderizar tabela de horários
+        function renderHorariosTable() {
+            const tableBody = document.getElementById('horariosTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentHorariosPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = horariosData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(horario => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${horario.id}</td>
+                            <td>${horario.dia_semana}</td>
+                            <td>${formatTime(horario.horario_inicio)} - ${formatTime(horario.horario_fim)}</td>
+                            <td>${horario.faixa}</td>
+                            <td>${horario.professor_nome || '-'}</td>
+                            <td>${horario.vagas_disponiveis}/${horario.vagas}</td>
+                            <td>
+                                <button class="action-btn edit" onclick="editHorario(${horario.id})"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete" onclick="deleteHorario(${horario.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de horários
+        function changeHorariosPage(page) {
+            currentHorariosPage = page;
+            renderHorariosTable();
+            renderPagination(horariosData.length, currentHorariosPage, 'horariosPagination', 'changeHorariosPage');
+        }
+
+        // Buscar horários
+        function searchHorarios() {
+            const searchTerm = document.getElementById('horariosSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadHorarios();
+                return;
+            }
+
+            const filteredHorarios = horariosData.filter(horario =>
+                horario.dia_semana.toLowerCase().includes(searchTerm) ||
+                horario.faixa.toLowerCase().includes(searchTerm) ||
+                (horario.professor_nome && horario.professor_nome.toLowerCase().includes(searchTerm))
+            );
+
+            horariosData = filteredHorarios;
+            currentHorariosPage = 1;
+            renderHorariosTable();
+            renderPagination(horariosData.length, currentHorariosPage, 'horariosPagination', 'changeHorariosPage');
+        }
+
+        // Abrir modal de adicionar horário
+        function openAddHorarioModal() {
+            document.getElementById('addHorarioForm').reset();
+            openModal('addHorarioModal');
+        }
+
+        // Adicionar horário
+        document.getElementById('addHorarioForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const dia_semana = document.getElementById('horarioDia').value;
+            const horario_inicio = document.getElementById('horarioInicio').value;
+            const horario_fim = document.getElementById('horarioFim').value;
+            const faixa = document.getElementById('horarioFaixa').value;
+            const professor_id = document.getElementById('horarioProfessor').value;
+            const vagas = document.getElementById('horarioVagas').value;
+
+            try {
+                const response = await fetch('api.php?endpoint=horarios/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dia_semana,
+                        horario_inicio,
+                        horario_fim,
+                        faixa,
+                        professor_id,
+                        vagas
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('addHorarioModal');
+                    loadHorarios();
+                    alert('Horário adicionado com sucesso!');
+                } else {
+                    alert('Erro ao adicionar horário: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar horário:', error);
+                alert('Erro ao adicionar horário. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Editar horário
+        async function editHorario(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=horarios/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const horario = data.data;
+
+                    document.getElementById('editHorarioId').value = horario.id;
+                    document.getElementById('editHorarioDia').value = horario.dia_semana;
+                    document.getElementById('editHorarioInicio').value = horario.horario_inicio;
+                    document.getElementById('editHorarioFim').value = horario.horario_fim;
+                    document.getElementById('editHorarioFaixa').value = horario.faixa;
+                    document.getElementById('editHorarioProfessor').value = horario.professor_id || '';
+                    document.getElementById('editHorarioVagas').value = horario.vagas;
+
+                    openModal('editHorarioModal');
+                } else {
+                    alert('Erro ao carregar dados do horário: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do horário:', error);
+                alert('Erro ao carregar dados do horário. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Atualizar horário
+        document.getElementById('editHorarioForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const id = document.getElementById('editHorarioId').value;
+            const dia_semana = document.getElementById('editHorarioDia').value;
+            const horario_inicio = document.getElementById('editHorarioInicio').value;
+            const horario_fim = document.getElementById('editHorarioFim').value;
+            const faixa = document.getElementById('editHorarioFaixa').value;
+            const professor_id = document.getElementById('editHorarioProfessor').value;
+            const vagas = document.getElementById('editHorarioVagas').value;
+
+            try {
+                const response = await fetch(`api.php?endpoint=horarios/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        dia_semana,
+                        horario_inicio,
+                        horario_fim,
+                        faixa,
+                        professor_id,
+                        vagas
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('editHorarioModal');
+                    loadHorarios();
+                    alert('Horário atualizado com sucesso!');
+                } else {
+                    alert('Erro ao atualizar horário: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar horário:', error);
+                alert('Erro ao atualizar horário. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Excluir horário
+        async function deleteHorario(id) {
+            if (!confirm('Tem certeza que deseja excluir este horário?')) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=horarios/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadHorarios();
+                    alert('Horário excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir horário: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir horário:', error);
+                alert('Erro ao excluir horário. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar pagamentos
+        async function loadPagamentos() {
+            showLoading();
+
+            try {
+                const response = await fetch('api.php?endpoint=pagamentos');
+                const data = await response.json();
+
+                if (data.success) {
+                    pagamentosData = data.data;
+                    renderPagamentosTable();
+                    renderPagination(pagamentosData.length, currentPagamentosPage, 'pagamentosPagination', 'changePagamentosPage');
+                } else {
+                    console.error('Erro ao carregar pagamentos:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar pagamentos:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar tabela de pagamentos
+        function renderPagamentosTable() {
+            const tableBody = document.getElementById('pagamentosTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentPagamentosPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = pagamentosData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(pagamento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${pagamento.id}</td>
+                            <td>${pagamento.aluno_nome}</td>
+                            <td>${pagamento.plano_nome}</td>
+                            <td>${formatCurrency(pagamento.valor)}</td>
+                            <td>${formatDate(pagamento.data_pagamento)}</td>
+                            <td><span class="status ${pagamento.status.toLowerCase()}">${pagamento.status}</span></td>
+                            <td>
+                                <button class="action-btn view" onclick="viewPagamento(${pagamento.id})"><i class="fas fa-eye"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de pagamentos
+        function changePagamentosPage(page) {
+            currentPagamentosPage = page;
+            renderPagamentosTable();
+            renderPagination(pagamentosData.length, currentPagamentosPage, 'pagamentosPagination', 'changePagamentosPage');
+        }
+
+        // Buscar pagamentos
+        function searchPagamentos() {
+            const searchTerm = document.getElementById('pagamentosSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadPagamentos();
+                return;
+            }
+
+            const filteredPagamentos = pagamentosData.filter(pagamento =>
+                pagamento.aluno_nome.toLowerCase().includes(searchTerm) ||
+                pagamento.plano_nome.toLowerCase().includes(searchTerm) ||
+                pagamento.status.toLowerCase().includes(searchTerm)
+            );
+
+            pagamentosData = filteredPagamentos;
+            currentPagamentosPage = 1;
+            renderPagamentosTable();
+            renderPagination(pagamentosData.length, currentPagamentosPage, 'pagamentosPagination', 'changePagamentosPage');
+        }
+
+        // Visualizar pagamento
+        async function viewPagamento(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=pagamentos/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const pagamento = data.data;
+
+                    // Exibir detalhes do pagamento (você pode criar um modal para isso)
+                    alert(`
+                                ID: ${pagamento.id}
+                                Aluno: ${pagamento.aluno_nome}
+                                Plano: ${pagamento.plano_nome}
+                                Valor: ${formatCurrency(pagamento.valor)}
+                                Data: ${formatDate(pagamento.data_pagamento)}
+                                Status: ${pagamento.status}
+                                Método: ${pagamento.metodo_pagamento || 'Não informado'}
+                            `);
+                } else {
+                    alert('Erro ao carregar dados do pagamento: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados do pagamento:', error);
+                alert('Erro ao carregar dados do pagamento. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar notificações
+        // Modificar a função loadNotificacoes para incluir notificações de alunos
+
+        function viewNotificacao(id) {
+            fetch(`api.php?endpoint=notificacoes_${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const notificacao = data.data;
+
+                        // Criar modal ou mostrar detalhes
+                        const modalContent = `
+                    <div class="modal fade" id="viewNotificacaoModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detalhes da Notificação</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Título:</strong> ${notificacao.titulo}</p>
+                                    <p><strong>Mensagem:</strong> ${notificacao.mensagem}</p>
+                                    <p><strong>Usuário:</strong> ${notificacao.usuario_nome || 'Sistema'}</p>
+                                    <p><strong>Tipo:</strong> ${notificacao.tipo}</p>
+                                    <p><strong>Data:</strong> ${new Date(notificacao.data_envio).toLocaleString('pt-BR')}</p>
+                                    <p><strong>Status:</strong> ${notificacao.lida == 1 ? 'Lida' : 'Não lida'}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                        // Remover modal existente se houver
+                        const existingModal = document.getElementById('viewNotificacaoModal');
+                        if (existingModal) {
+                            existingModal.remove();
+                        }
+
+                        // Adicionar novo modal
+                        document.body.insertAdjacentHTML('beforeend', modalContent);
+
+                        // Mostrar modal
+                        const modal = new bootstrap.Modal(document.getElementById('viewNotificacaoModal'));
+                        modal.show();
+                    } else {
+                        showMessage('Erro ao carregar notificação: ' + data.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showMessage('Erro ao carregar notificação: ' + error.message, 'error');
+                });
+        }
+
+        function marcarComoLida(id) {
+            fetch('api.php?endpoint=notificacoes_marcar_lida', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Notificação marcada como lida!', 'success');
+                        loadNotificacoes();
+                    } else {
+                        showMessage('Erro ao marcar notificação: ' + data.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showMessage('Erro ao marcar notificação: ' + error.message, 'error');
+                });
+        }
+
+        function deleteNotificacao(id) {
+            if (confirm('Tem certeza que deseja excluir esta notificação?')) {
+                fetch('api.php?endpoint=notificacoes_delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage('Notificação excluída com sucesso!', 'success');
+                            loadNotificacoes();
+                        } else {
+                            showMessage('Erro ao excluir notificação: ' + data.error, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        showMessage('Erro ao excluir notificação: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        // Renderizar tabela de notificações
+        function renderNotificacoesTable() {
+            const tableBody = document.getElementById('notificacoesTableBody');
+            tableBody.innerHTML = '';
+
+            const startIndex = (currentNotificacoesPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = notificacoesData.slice(startIndex, endIndex);
+
+            currentPageData.forEach(notificacao => {
+                const row = document.createElement('tr');
+                const isRead = notificacao.lida ? '' : 'unread';
+
+                row.className = isRead;
+                row.innerHTML = `
+                            <td>${notificacao.id}</td>
+                            <td>${notificacao.titulo}</td>
+                            <td>${notificacao.destinatario_nome || 'Todos'}</td>
+                            <td>${formatDate(notificacao.data_envio)}</td>
+                            <td><span class="status ${notificacao.lida ? 'lida' : 'nao-lida'}">${notificacao.lida ? 'Lida' : 'Não lida'}</span></td>
+                            <td>
+                                <button class="action-btn view" onclick="viewNotificacao(${notificacao.id})"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn delete" onclick="deleteNotificacao(${notificacao.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Mudar página de notificações
+        function changeNotificacoesPage(page) {
+            currentNotificacoesPage = page;
+            renderNotificacoesTable();
+            renderPagination(notificacoesData.length, currentNotificacoesPage, 'notificacoesPagination', 'changeNotificacoesPage');
+        }
+
+        // Buscar notificações
+        function searchNotificacoes() {
+            const searchTerm = document.getElementById('notificacoesSearchInput').value.toLowerCase();
+
+            if (searchTerm.trim() === '') {
+                loadNotificacoes();
+                return;
+            }
+
+            const filteredNotificacoes = notificacoesData.filter(notificacao =>
+                notificacao.titulo.toLowerCase().includes(searchTerm) ||
+                notificacao.mensagem.toLowerCase().includes(searchTerm) ||
+                (notificacao.destinatario_nome && notificacao.destinatario_nome.toLowerCase().includes(searchTerm))
+            );
+
+            notificacoesData = filteredNotificacoes;
+            currentNotificacoesPage = 1;
+            renderNotificacoesTable();
+            renderPagination(notificacoesData.length, currentNotificacoesPage, 'notificacoesPagination', 'changeNotificacoesPage');
+        }
+
+        // Abrir modal de adicionar notificação
+        function openAddNotificacaoModal() {
+            document.getElementById('addNotificacaoForm').reset();
+            document.getElementById('destinatarioSelectGroup').style.display = 'none';
+            loadDestinatarios();
+            openModal('addNotificacaoModal');
+        }
+
+        // Carregar destinatários para o select
+        async function loadDestinatarios() {
+            try {
+                // Carregar alunos
+                const alunosResponse = await fetch('api.php?endpoint=alunos');
+                const alunosData = await alunosResponse.json();
+
+                // Carregar professores
+                const professoresResponse = await fetch('api.php?endpoint=professores');
+                const professoresData = await professoresResponse.json();
+
+                const select = document.getElementById('notificacaoDestinatario');
+                select.innerHTML = '<option value="">Selecione um destinatário</option>';
+
+                if (alunosData.success) {
+                    const alunosGroup = document.createElement('optgroup');
+                    alunosGroup.label = 'Alunos';
+
+                    alunosData.data.forEach(aluno => {
+                        if (aluno.status === 'Ativo') {
+                            const option = document.createElement('option');
+                            option.value = `aluno_${aluno.id}`;
+                            option.textContent = aluno.nome;
+                            alunosGroup.appendChild(option);
+                        }
+                    });
+
+                    select.appendChild(alunosGroup);
+                }
+
+                if (professoresData.success) {
+                    const professoresGroup = document.createElement('optgroup');
+                    professoresGroup.label = 'Professores';
+
+                    professoresData.data.forEach(professor => {
+                        if (professor.status === 'Ativo') {
+                            const option = document.createElement('option');
+                            option.value = `professor_${professor.id}`;
+                            option.textContent = professor.nome;
+                            professoresGroup.appendChild(option);
+                        }
+                    });
+
+                    select.appendChild(professoresGroup);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar destinatários:', error);
+            }
+        }
+
+        // Alternar tipo de destinatário
+        function toggleDestinatarioType() {
+            const tipoDestinatario = document.getElementById('notificacaoTipoDestinatario').value;
+            const destinatarioSelectGroup = document.getElementById('destinatarioSelectGroup');
+
+            if (tipoDestinatario === 'especifico') {
+                destinatarioSelectGroup.style.display = 'block';
+            } else {
+                destinatarioSelectGroup.style.display = 'none';
+            }
+        }
+
+        // Adicionar notificação
+        document.getElementById('addNotificacaoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            showLoading();
+
+            const titulo = document.getElementById('notificacaoTitulo').value;
+            const mensagem = document.getElementById('notificacaoMensagem').value;
+            const tipoDestinatario = document.getElementById('notificacaoTipoDestinatario').value;
+            const destinatario = document.getElementById('notificacaoDestinatario').value;
+
+            try {
+                const response = await fetch('api.php?endpoint=notificacoes/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        titulo,
+                        mensagem,
+                        tipo_destinatario: tipoDestinatario,
+                        destinatario: tipoDestinatario === 'especifico' ? destinatario : null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('addNotificacaoModal');
+                    loadNotificacoes();
+                    alert('Notificação enviada com sucesso!');
+                } else {
+                    alert('Erro ao enviar notificação: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao enviar notificação:', error);
+                alert('Erro ao enviar notificação. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Visualizar notificação
+        async function viewNotificacao(id) {
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=notificacoes/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const notificacao = data.data;
+                    currentNotificacaoId = notificacao.id;
+
+                    document.getElementById('viewNotificacaoTitulo').textContent = notificacao.titulo;
+                    document.getElementById('viewNotificacaoMensagem').textContent = notificacao.mensagem;
+                    document.getElementById('viewNotificacaoData').textContent = formatDate(notificacao.data_envio);
+
+                    // Exibir informações do remetente ou destinatário conforme a origem
+                    if (notificacao.origem === 'aluno') {
+                        document.getElementById('viewNotificacaoRemetente').textContent = notificacao.remetente_nome || 'Aluno';
+                        document.getElementById('viewNotificacaoRemetenteLabel').textContent = 'Remetente (Aluno):';
+                        document.getElementById('viewNotificacaoDestinatarioContainer').style.display = 'none';
+                    } else {
+                        document.getElementById('viewNotificacaoRemetente').textContent = 'Administrador';
+                        document.getElementById('viewNotificacaoRemetenteLabel').textContent = 'Remetente:';
+                        document.getElementById('viewNotificacaoDestinatarioContainer').style.display = 'block';
+                        document.getElementById('viewNotificacaoDestinatario').textContent = notificacao.destinatario_nome || 'Todos';
+                    }
+
+                    // Mostrar ou esconder botão de marcar como lida
+                    document.getElementById('marcarLidaBtn').style.display = notificacao.lida ? 'none' : 'inline-block';
+
+                    openModal('viewNotificacaoModal');
+                } else {
+                    alert('Erro ao carregar dados da notificação: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados da notificação:', error);
+                alert('Erro ao carregar dados da notificação. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Marcar notificação como lida
+        async function marcarNotificacaoComoLida() {
+            if (!currentNotificacaoId) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=notificacoes/marcar-lida`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: currentNotificacaoId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeModal('viewNotificacaoModal');
+                    loadNotificacoes();
+                } else {
+                    alert('Erro ao marcar notificação como lida: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao marcar notificação como lida:', error);
+                alert('Erro ao marcar notificação como lida. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Excluir notificação
+        async function deleteNotificacao(id) {
+            if (!confirm('Tem certeza que deseja excluir esta notificação?')) {
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`api.php?endpoint=notificacoes/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    loadNotificacoes();
+                    alert('Notificação excluída com sucesso!');
+                } else {
+                    alert('Erro ao excluir notificação: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir notificação:', error);
+                alert('Erro ao excluir notificação. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Carregar relatórios
+        async function loadRelatorios() {
+            showLoading();
+
+            try {
+                // Carregar dados para os gráficos
+                const response = await fetch('api.php?endpoint=relatorios');
+                const data = await response.json();
+
+                if (data.success) {
+                    // Renderizar gráficos
+                    renderReceitaChart(data.receita);
+                    renderAlunosFaixaChart(data.alunos_faixa);
+                    renderFrequenciaChart(data.frequencia);
+                    renderAssinaturasChart(data.assinaturas);
+                } else {
+                    console.error('Erro ao carregar dados dos relatórios:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar relatórios:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar gráfico de receita
+        function renderReceitaChart(data) {
+            const ctx = document.getElementById('receitaChart').getContext('2d');
+
+            if (receitaChart) {
+                receitaChart.destroy();
+            }
+
+            receitaChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Receita Mensal',
+                        data: data.values,
+                        backgroundColor: 'rgba(255, 77, 77, 0.2)',
+                        borderColor: 'rgba(255, 77, 77, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'R$ ' + context.raw.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar gráfico de alunos por faixa
+        function renderAlunosFaixaChart(data) {
+            const ctx = document.getElementById('alunosFaixaChart').getContext('2d');
+
+            if (alunosFaixaChart) {
+                alunosFaixaChart.destroy();
+            }
+
+            alunosFaixaChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.8)',
+                            'rgba(255, 255, 0, 0.8)',
+                            'rgba(255, 165, 0, 0.8)',
+                            'rgba(0, 128, 0, 0.8)',
+                            'rgba(0, 0, 255, 0.8)',
+                            'rgba(128, 0, 128, 0.8)',
+                            'rgba(139, 69, 19, 0.8)',
+                            'rgba(0, 0, 0, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 255, 255, 1)',
+                            'rgba(255, 255, 0, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(0, 128, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(128, 0, 128, 1)',
+                            'rgba(139, 69, 19, 1)',
+                            'rgba(0, 0, 0, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + context.raw + ' alunos';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar gráfico de frequência
+        function renderFrequenciaChart(data) {
+            const ctx = document.getElementById('frequenciaChart').getContext('2d');
+
+            if (frequenciaChart) {
+                frequenciaChart.destroy();
+            }
+
+            frequenciaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Frequência por Dia da Semana',
+                        data: data.values,
+                        backgroundColor: 'rgba(255, 77, 77, 0.8)',
+                        borderColor: 'rgba(255, 77, 77, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.raw + ' presenças';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Responder notificação
+        function responderNotificacao() {
+            // Obter a notificação atual
+            const notificacao = notificacoesData.find(n => n.id === currentNotificacaoId);
+            if (!notificacao) return;
+
+            // Preencher o formulário de nova notificação com informações de resposta
+            document.getElementById('notificacaoTitulo').value = `RE: ${notificacao.titulo}`;
+            document.getElementById('notificacaoMensagem').value = `\n\n--- Mensagem original ---\n${notificacao.mensagem}`;
+
+            // Configurar o destinatário como o remetente original
+            if (notificacao.origem === 'aluno') {
+                document.getElementById('notificacaoTipo').value = 'individual';
+                toggleDestinatarioSelect();
+
+                // Esperar um momento para que o select seja preenchido
+                setTimeout(() => {
+                    const destinatarioSelect = document.getElementById('notificacaoDestinatario');
+                    const alunoId = notificacao.remetente_id;
+                    const option = Array.from(destinatarioSelect.options).find(opt => opt.value === `aluno_${alunoId}`);
+                    if (option) {
+                        option.selected = true;
+                    }
+                }, 300);
+            }
+
+            // Fechar modal atual e abrir modal de nova notificação
+            closeModal('viewNotificacaoModal');
+            openModal('addNotificacaoModal');
+        }
+
+        // Função para alternar a exibição do select de destinatário
+        function toggleDestinatarioSelect() {
+            const tipoNotificacao = document.getElementById('notificacaoTipo').value;
+            const destinatarioSelectGroup = document.getElementById('destinatarioSelectGroup');
+
+            if (tipoNotificacao === 'individual') {
+                destinatarioSelectGroup.style.display = 'block';
+                loadDestinatarios();
+            } else {
+                destinatarioSelectGroup.style.display = 'none';
+            }
+        }
+
+        // Renderizar gráfico de assinaturas
+        function renderAssinaturasChart(data) {
+            const ctx = document.getElementById('assinaturasChart').getContext('2d');
+
+            if (assinaturasChart) {
+                assinaturasChart.destroy();
+            }
+
+            assinaturasChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            'rgba(255, 77, 77, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 77, 77, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + context.raw + ' assinaturas';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Exportar relatório
+        function exportarRelatorio(tipo) {
+            showLoading();
+
+            try {
+                // Implementar exportação de relatórios (PDF, Excel, etc.)
+                switch (tipo) {
+                    case 'pdf':
+                        alert('Exportação para PDF não implementada ainda.');
+                        break;
+                    case 'excel':
+                        alert('Exportação para Excel não implementada ainda.');
+                        break;
+                    case 'csv':
+                        alert('Exportação para CSV não implementada ainda.');
+                        break;
+                }
+            } catch (error) {
+                console.error('Erro ao exportar relatório:', error);
+                alert('Erro ao exportar relatório. Verifique o console para mais detalhes.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function () {
+            checkLogin();
+            loadUserData();
+            detectSystemTheme();
+            switchTab('dashboard');
+        });
+
+        // Função para carregar os dados dos relatórios
+        async function loadRelatorios() {
+            showLoading();
+            try {
+                const response = await fetch('api.php?endpoint=relatorios');
+                const data = await response.json();
+
+                if (data.success) {
+                    renderReceitaChart(data.data.receita);
+                    renderAlunosFaixaChart(data.data.faixas);
+                    renderFrequenciaChart(data.data.frequencia);
+                    renderAssinaturasChart(data.data.planos);
+                } else {
+                    console.error('Erro ao carregar relatórios:', data.error);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar relatórios:', error);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Renderizar gráfico de receita
+        function renderReceitaChart(data) {
+            const ctx = document.getElementById('receitaChart').getContext('2d');
+
+            if (receitaChart) {
+                receitaChart.destroy();
+            }
+
+            receitaChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Receita Mensal',
+                        data: data.values,
+                        backgroundColor: 'rgba(255, 77, 77, 0.2)',
+                        borderColor: 'rgba(255, 77, 77, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'R$ ' + context.raw.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar gráfico de alunos por faixa
+        function renderAlunosFaixaChart(data) {
+            const ctx = document.getElementById('alunosFaixaChart').getContext('2d');
+
+            if (alunosFaixaChart) {
+                alunosFaixaChart.destroy();
+            }
+
+            alunosFaixaChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.8)',
+                            'rgba(255, 255, 0, 0.8)',
+                            'rgba(255, 165, 0, 0.8)',
+                            'rgba(0, 128, 0, 0.8)',
+                            'rgba(0, 0, 255, 0.8)',
+                            'rgba(128, 0, 128, 0.8)',
+                            'rgba(139, 69, 19, 0.8)',
+                            'rgba(0, 0, 0, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 255, 255, 1)',
+                            'rgba(255, 255, 0, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(0, 128, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(128, 0, 128, 1)',
+                            'rgba(139, 69, 19, 1)',
+                            'rgba(0, 0, 0, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + context.raw + ' alunos';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar gráfico de frequência
+        function renderFrequenciaChart(data) {
+            const ctx = document.getElementById('frequenciaChart').getContext('2d');
+
+            if (frequenciaChart) {
+                frequenciaChart.destroy();
+            }
+
+            frequenciaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Frequência por Dia da Semana',
+                        data: data.values,
+                        backgroundColor: 'rgba(255, 77, 77, 0.8)',
+                        borderColor: 'rgba(255, 77, 77, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.raw + ' presenças';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar gráfico de assinaturas
+        function renderAssinaturasChart(data) {
+            const ctx = document.getElementById('assinaturasChart').getContext('2d');
+
+            if (assinaturasChart) {
+                assinaturasChart.destroy();
+            }
+
+            assinaturasChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            'rgba(255, 77, 77, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 77, 77, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + context.raw + ' assinaturas';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Atualizar a função loadRelatorios para usar as novas funções
+        function loadRelatorios() {
+            fetch('api.php?endpoint=relatorios')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderReceitaChart(data.data.receita);
+                        renderAlunosFaixaChart(data.data.faixas);
+                        renderFrequenciaChart(data.data.frequencia);
+                        renderAssinaturasChart(data.data.planos);
+                    }
+                })
+                .catch(error => console.error('Erro ao carregar relatórios:', error));
+        }
+
+    </script>
+</body>
+
+</html>

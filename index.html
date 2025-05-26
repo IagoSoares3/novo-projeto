@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ART OF FIGHT - Academia de Artes Marciais</title>
+    <style>
+        :root {
+            --primary-color: #FF4D4D;
+            --secondary-color: #1A1A1A;
+            --accent-color: #FFD700;
+            --background-light: #FFFFFF;
+            --text-light: #333333;
+            --background-dark: #1a1a1a;
+            --text-dark: #FFFFFF;
+            --card-light: #FFFFFF;
+            --card-dark: #2a2a2a;
+            --input-light: #f5f5f5;
+            --input-dark: #333333;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: all var(--transition-speed) ease;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all var(--transition-speed) ease;
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 60px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        header.scrolled .logo img {
+            height: 50px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        .nav-links a.active {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(255, 77, 77, 0.9));
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-color);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 40px;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all var(--transition-speed) ease;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: transparent;
+            color: var(--accent-color);
+        }
+
+        .cta-button:active {
+            transform: translateY(-2px);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent);
+            transition: 0.5s;
+            z-index: 1;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button i {
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .cta-button:hover i {
+            transform: translateX(5px);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .about {
+            padding: 100px 0;
+            background-color: var(--background-light);
+        }
+
+        .dark-mode .about {
+            background-color: var(--background-dark);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .about-card {
+            background: var(--card-light);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all var(--transition-speed) ease;
+            border: 2px solid transparent;
+            height: 100%;
+        }
+
+        .dark-mode .about-card {
+            background: var(--card-dark);
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 77, 77, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .about-card i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .about-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-card p {
+            line-height: 1.6;
+        }
+
+        /* Estilos para a seção de planos */
+        .plans {
+            background-color: var(--background-light);
+            position: relative;
+            padding: 100px 0;
+        }
+
+        .dark-mode .plans {
+            background-color: var(--background-dark);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .plan-card {
+            background: var(--card-light);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .dark-mode .plan-card {
+            background: var(--card-dark);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .plan-card.featured {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .plan-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            font-weight: bold;
+            padding: 8px 15px;
+            font-size: 12px;
+            border-bottom-left-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plan-header {
+            padding: 30px 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .dark-mode .plan-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .plan-header h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: rgba(255, 77, 77, 0.1);
+            color: var(--primary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .price {
+            text-align: center;
+            padding: 30px 0 15px;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .dark-mode .price {
+            color: var(--text-dark);
+        }
+
+        .price .currency {
+            font-size: 24px;
+            vertical-align: top;
+            margin-right: 5px;
+        }
+
+        .price .amount {
+            font-size: 48px;
+            line-height: 1;
+        }
+
+        .price .period {
+            font-size: 16px;
+            opacity: 0.7;
+        }
+
+        .savings {
+            text-align: center;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .plan-features {
+            padding: 20px 30px;
+            flex-grow: 1;
+        }
+
+        .plan-features ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .plan-features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .plan-features li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .plan-btn {
+            margin: 10px 30px 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: 1;
+        }
+
+        .plan-btn:hover::before {
+            left: 100%;
+        }
+
+        .plan-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+            background: var(--primary-color);
+        }
+
+        .plan-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .plan-btn:hover i {
+            transform: translateX(5px);
+        }
+
+        .featured .plan-btn {
+            background: linear-gradient(135deg, var(--accent-color), #FFA500);
+            color: var(--secondary-color);
+        }
+
+        .featured .plan-btn:hover {
+            background: var(--accent-color);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--background-light);
+            position: relative;
+        }
+
+        .dark-mode .testimonials {
+            background-color: var(--background-dark);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: var(--card-light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .dark-mode .testimonial-card {
+            background: var(--card-dark);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            font-size: 80px;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            color: var(--primary-color);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-card .quote {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-card .author {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .testimonial-card .author::before {
+            content: '—';
+            color: var(--primary-color);
+        }
+
+        .contact {
+            padding: 100px 0;
+            background-color: var(--background-light);
+            position: relative;
+        }
+
+        .dark-mode .contact {
+            background-color: var(--background-dark);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        .contact-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-info p {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.1rem;
+        }
+
+        .contact-info p i {
+            color: var(--primary-color);
+            font-size: 24px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .contact-form h3 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 25px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all var(--transition-speed) ease;
+            background-color: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .contact-form input,
+        .dark-mode .contact-form textarea {
+            background-color: var(--input-dark);
+            color: var(--text-dark);
+            border-color: #444;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .contact-form .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all var(--transition-speed) ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .contact-form .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+            background: var(--primary-color);
+        }
+
+        .contact-form .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .contact-form .btn i {
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .contact-form .btn:hover i {
+            transform: translateX(5px);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 0 20px;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: white;
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        .chatbot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all var(--transition-speed) ease;
+            z-index: 1000;
+        }
+
+        .chatbot:hover {
+            transform: scale(1.1);
+            background: var(--secondary-color);
+        }
+
+        .chatbot i {
+            font-size: 24px;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: var(--card-light);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            cursor: move;
+            user-select: none;
+            border: 2px solid var(--primary-color);
+        }
+
+        .dark-mode .chat-window {
+            background: var(--card-dark);
+        }
+
+        .chat-header {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+            cursor: move;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+            cursor: move;
+        }
+
+        .chat-header .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 2;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: default;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot {
+            background: rgba(135, 206, 235, 0.1);
+            color: var(--text-light);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .dark-mode .message.bot {
+            background: rgba(135, 206, 235, 0.2);
+            color: var(--text-dark);
+        }
+
+        .message-time {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dark-mode .chat-input-container {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid rgba(135, 206, 235, 0.3);
+            border-radius: 25px;
+            outline: none;
+            transition: all var(--transition-speed) ease;
+            background: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .chat-input {
+            background: var(--input-dark);
+            color: var(--text-dark);
+            border-color: rgba(135, 206, 235, 0.2);
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.2);
+        }
+
+        .send-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .send-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: rgba(135, 206, 235, 0.1);
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: var(--primary-color);
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-reply {
+            background: rgba(135, 206, 235, 0.1);
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            border: 1px solid transparent;
+        }
+
+        .dark-mode .quick-reply {
+            background: rgba(135, 206, 235, 0.2);
+            color: var(--text-dark);
+        }
+
+        .quick-reply:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Modal de cadastro */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-light);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+
+        .dark-mode .modal-content {
+            background: var(--card-dark);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all var(--transition-speed) ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 77, 77, 0.1);
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .dark-mode .modal .form-group label {
+            color: var(--text-dark);
+        }
+
+        .modal .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all var(--transition-speed) ease;
+            background-color: var(--input-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .modal .form-group input {
+            background-color: var(--input-dark);
+            border-color: #444;
+            color: var(--text-dark);
+        }
+
+        .modal .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.2);
+        }
+
+        .modal .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all var(--transition-speed) ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .modal .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+        }
+
+        .modal .btn:active {
+            transform: translateY(0);
+        }
+
+        .modal .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .modal .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .modal .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+
+            .plans-grid,
+            .about-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .plan-card.featured {
+                transform: scale(1);
+            }
+
+            .plan-card.featured:hover {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--secondary-color);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .about-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+                margin: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .chatbot {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .chat-window {
+                width: 300px;
+                height: 450px;
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header id="header">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.png" alt="ART OF FIGHT"
+                        onerror="this.src='https://via.placeholder.com/60x60?text=AOF'">
+                    <div class="logo-text">ART OF FIGHT</div>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" class="active">Início</a>
+                    <a href="#about">Sobre</a>
+                    <a href="#plans">Planos</a>
+                    <a href="#testimonials">Depoimentos</a>
+                    <a href="#contact">Contato</a>
+                    <a href="#" id="loginLink">Login</a>
+                    <a href="dashboard.html" id="dashboardLink" style="display: none;">Meu Painel</a>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>ART OF FIGHT</h1>
+                <p>Descubra o poder das artes marciais e transforme seu corpo e mente</p>
+                <button class="cta-button" onclick="abrirModalCadastro()">
+                    Assinar Agora <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">Sobre Nós</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <h3>Estrutura Completa</h3>
+                    <p>Tatames profissionais, equipamentos de alta qualidade, vestiários modernos e área de convivência
+                        para os alunos.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h3>Professores Qualificados</h3>
+                    <p>Nossa equipe é formada por profissionais altamente capacitados e experientes em diversas artes
+                        marciais.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-medal"></i>
+                    <h3>Resultados Garantidos</h3>
+                    <p>Metodologia exclusiva que garante o desenvolvimento dos alunos em todas as fases do treinamento.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plans" id="plans">
+        <div class="container">
+            <h2 class="section-title">Nossos Planos</h2>
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Plano Mensal</h3>
+                        <div class="plan-badge">Básico</div>
+                    </div>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">150</span>
+                        <span class="period">/mês</span>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2 aulas por semana</li>
+                            <li><i class="fas fa-check"></i> Acesso aos vestiários</li>
+                            <li><i class="fas fa-check"></i> Material didático</li>
+                            <li><i class="fas fa-check"></i> Suporte online</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="plan-btn" onclick="selecionarPlano(1)">
+                        Assinar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="plan-card featured">
+                    <div class="popular-tag">Mais Popular</div>
+                    <div class="plan-header">
+                        <h3>Plano Semestral</h3>
+                        <div class="plan-badge">Intermediário</div>
+                    </div>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">800</span>
+                        <span class="period">/6 meses</span>
+                    </div>
+                    <div class="savings">Economia de R$ 100</div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 3 aulas por semana</li>
+                            <li><i class="fas fa-check"></i> Acesso aos vestiários</li>
+                            <li><i class="fas fa-check"></i> Material didático</li>
+                            <li><i class="fas fa-check"></i> Suporte online</li>
+                            <li><i class="fas fa-check"></i> 10% de desconto</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="plan-btn" onclick="selecionarPlano(2)">
+                        Assinar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Plano Anual</h3>
+                        <div class="plan-badge">Premium</div>
+                    </div>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">1.500</span>
+                        <span class="period">/ano</span>
+                    </div>
+                    <div class="savings">Economia de R$ 300</div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Aulas ilimitadas</li>
+                            <li><i class="fas fa-check"></i> Acesso aos vestiários</li>
+                            <li><i class="fas fa-check"></i> Material didático</li>
+                            <li><i class="fas fa-check"></i> Suporte online</li>
+                            <li><i class="fas fa-check"></i> 20% de desconto</li>
+                            <li><i class="fas fa-check"></i> Kit exclusivo</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="plan-btn" onclick="selecionarPlano(3)">
+                        Assinar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">Depoimentos</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="quote">"A Art of Fight mudou minha vida! Em 6 meses já perdi 15kg e melhorei muito minha
+                        saúde. Os professores são excelentes e o ambiente é muito acolhedor."</p>
+                    <p class="author">Maria Silva</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"Meus filhos adoram as aulas! Os professores são muito atenciosos e a estrutura é
+                        excelente. Recomendo para todas as idades."</p>
+                    <p class="author">João Santos</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"A melhor academia de artes marciais que já frequentei. Profissionais qualificados,
+                        ambiente acolhedor e resultados impressionantes."</p>
+                    <p class="author">Ana Oliveira</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contato</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Informações de Contato</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Rua das Águas, 123 - Centro</p>
+                    <p><i class="fas fa-phone"></i> (11) 99396-7438</p>
+                    <p><i class="fas fa-envelope"></i> rafaelgzzzz1@gmail.com</p>
+                    <p><i class="fas fa-clock"></i> Segunda a Sexta: 6h às 22h</p>
+                    <p><i class="fas fa-clock"></i> Sábado: 8h às 18h</p>
+                </div>
+                <div class="contact-form">
+                    <h3>Envie uma Mensagem</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensagem</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">
+                            Enviar <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Art of Fight</h3>
+                    <p>Academia especializada em artes marciais com foco em desenvolvimento físico e mental para todas
+                        as idades.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Início</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> Sobre Nós</a></li>
+                        <li><a href="#plans"><i class="fas fa-chevron-right"></i> Planos</a></li>
+                        <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Depoimentos</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Modalidades</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Jiu-Jitsu</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Muay Thai</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Boxe</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Karatê</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Defesa Pessoal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 Art of Fight - Todos os direitos reservados
+            </div>
+        </div>
+    </footer>
+
+    <div class="chatbot" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>Assistente Virtual Art of Fight</h3>
+            <button class="close-chat" onclick="toggleChat()">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                Olá! Como posso ajudar você hoje?
+                <div class="quick-replies">
+                    <div class="quick-reply" onclick="handleQuickReply('planos')">Planos</div>
+                    <div class="quick-reply" onclick="handleQuickReply('horarios')">Horários</div>
+                    <div class="quick-reply" onclick="handleQuickReply('pagamento')">Pagamento</div>
+                </div>
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem..."
+                onkeypress="handleKeyPress(event)">
+            <button class="send-button" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="cadastroModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModalCadastro()">&times;</span>
+            <h2>Cadastre-se</h2>
+            <form id="cadastroForm">
+                <div class="form-group">
+                    <label for="cadastroNome">Nome</label>
+                    <input type="text" id="cadastroNome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="cadastroEmail">Email</label>
+                    <input type="email" id="cadastroEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="cadastroSenha">Senha</label>
+                    <input type="password" id="cadastroSenha" name="senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmarSenha">Confirmar Senha</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+                </div>
+                <button type="submit" class="btn">
+                    Cadastrar <i class="fas fa-user-plus"></i>
+                </button>
+            </form>
+            <div class="login-link">
+                Já tem uma conta? <a href="login.html">Faça login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Detectar tema do dispositivo
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // Monitorar mudanças no tema do sistema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+
+        // Header fixo com efeito de scroll
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Menu mobile
+        document.getElementById('mobileMenuBtn').addEventListener('click', function () {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Navegação suave
+        document.querySelectorAll('.nav-links a[href^="#"], .cta-button, footer a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        const headerOffset = 100;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        // Fechar menu mobile se estiver aberto
+                        document.getElementById('navLinks').classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Atualizar link ativo na navegação
+        window.addEventListener('scroll', function () {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Formulário de contato
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Aqui você pode adicionar o código para enviar o formulário para o backend
+
+            alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+            this.reset();
+        });
+
+        // Função para selecionar plano
+        function selecionarPlano(planoId) {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+            if (isLoggedIn === 'true') {
+                // Salvar o plano selecionado
+                localStorage.setItem('planoSelecionado', planoId);
+                window.location.href = 'checkout.html';
+            } else {
+                // Salvar o plano para depois do login
+                localStorage.setItem('planoSelecionado', planoId);
+                // Abrir modal de cadastro
+                abrirModalCadastro();
+            }
+        }
+
+        // Link de login
+        document.getElementById('loginLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = 'login.html';
+        });
+
+        // Verificar se o usuário está logado
+        window.onload = function () {
+            detectSystemTheme();
+
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginLink = document.getElementById('loginLink');
+            const dashboardLink = document.getElementById('dashboardLink');
+
+            if (isLoggedIn === 'true') {
+                loginLink.style.display = 'none';
+                dashboardLink.style.display = 'block';
+            } else {
+                loginLink.style.display = 'block';
+                dashboardLink.style.display = 'none';
+            }
+        };
+
+        // Funções para arrastar o chat
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const chatWindow = document.getElementById('chatWindow');
+        const chatHeader = chatWindow.querySelector('.chat-header');
+
+        chatHeader.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            // Verifica se o clique foi no botão de fechar
+            if (e.target.classList.contains('close-chat')) {
+                return;
+            }
+
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === chatHeader || e.target === chatHeader.querySelector('h3')) {
+                isDragging = true;
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, chatWindow);
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
+
+        // Função para abrir/fechar o chat
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            const chatbot = document.querySelector('.chatbot');
+
+            if (chatWindow.style.display === 'none' || !chatWindow.style.display) {
+                chatWindow.style.display = 'flex';
+                chatbot.style.opacity = '0.5';
+                // Resetar a posição quando abrir
+                xOffset = 0;
+                yOffset = 0;
+                setTranslate(0, 0, chatWindow);
+            } else {
+                chatWindow.style.display = 'none';
+                chatbot.style.opacity = '1';
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (message) {
+                addMessage('user', message);
+                input.value = '';
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    handleBotResponse(message);
+                }, 1000);
+            }
+        }
+
+        function addMessage(sender, message) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                        ${message}
+                        <div class="message-time">${time}</div>
+                    `;
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function handleQuickReply(topic) {
+            let message = '';
+            switch (topic) {
+                case 'planos':
+                    message = 'Quero saber sobre os planos';
+                    scrollToSection('plans');
+                    break;
+                case 'horarios':
+                    message = 'Quero ver os horários';
+                    break;
+                case 'pagamento':
+                    message = 'Preciso de ajuda com pagamento';
+                    break;
+                case 'assinar':
+                    scrollToSection('plans');
+                    toggleChat();
+                    return;
+                case 'detalhes':
+                    scrollToSection('about');
+                    toggleChat();
+                    return;
+                case 'agendar':
+                    scrollToSection('contact');
+                    toggleChat();
+                    return;
+                case 'niveis':
+                    scrollToSection('about');
+                    toggleChat();
+                    return;
+                case 'defesa':
+                    scrollToSection('about');
+                    toggleChat();
+                    return;
+                case 'faixas':
+                    scrollToSection('about');
+                    toggleChat();
+                    return;
+            }
+            document.getElementById('chatInput').value = message;
+            sendMessage();
+        }
+
+        function handleBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            let response = '';
+            let quickReplies = '';
+
+            if (lowerMessage.includes('plano') || lowerMessage.includes('preço') || lowerMessage.includes('valor')) {
+                response = 'Temos três planos disponíveis:\n\n' +
+                    '1. Plano Mensal: R$ 150,00/mês (2 aulas por semana)\n' +
+                    '2. Plano Semestral: R$ 800,00/6 meses (3 aulas por semana)\n' +
+                    '3. Plano Anual: R$ 1.500,00/ano (aulas ilimitadas)\n\n' +
+                    'Posso te ajudar a escolher o melhor plano para você!';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('assinar')">Quero assinar</div>
+                            <div class="quick-reply" onclick="handleQuickReply('detalhes')">Mais detalhes</div>
+                            <div class="quick-reply" onclick="scrollToSection('plans')">Ver planos</div>
+                        `;
+            } else if (lowerMessage.includes('horário') || lowerMessage.includes('aula')) {
+                response = 'Nossos horários são:\n\n' +
+                    'Segunda, Quarta e Sexta:\n' +
+                    '- 19:00 às 20:00 (Intermediário)\n' +
+                    '- 20:00 às 21:00 (Avançado)\n\n' +
+                    'Terça e Quinta:\n' +
+                    '- 19:00 às 20:00 (Iniciante)\n' +
+                    '- 20:00 às 21:00 (Intermediário)\n\n' +
+                    'Sábado:\n' +
+                    '- 10:00 às 11:00 (Todas as faixas)\n' +
+                    '- 11:00 às 12:00 (Defesa pessoal)';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('agendar')">Quero agendar</div>
+                            <div class="quick-reply" onclick="handleQuickReply('niveis')">Ver níveis</div>
+                            <div class="quick-reply" onclick="scrollToSection('about')">Sobre as aulas</div>
+                        `;
+            } else if (lowerMessage.includes('pagamento') || lowerMessage.includes('pagar')) {
+                response = 'Aceitamos os seguintes métodos de pagamento:\n\n' +
+                    '1. Cartão de crédito (até 12x sem juros)\n' +
+                    '2. PIX (pagamento instantâneo)\n' +
+                    '3. Boleto bancário\n\n' +
+                    'Como você prefere pagar?';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('cartao')">Cartão</div>
+                            <div class="quick-reply" onclick="handleQuickReply('pix')">PIX</div>
+                            <div class="quick-reply" onclick="handleQuickReply('boleto')">Boleto</div>
+                        `;
+            } else if (lowerMessage.includes('defesa pessoal')) {
+                response = 'Nossas aulas de defesa pessoal são focadas em técnicas práticas e eficientes:\n\n' +
+                    '1. Técnicas de desequilíbrio\n' +
+                    '2. Defesa contra agressões\n' +
+                    '3. Situações de risco\n' +
+                    '4. Consciência situacional\n\n' +
+                    'As aulas são ministradas aos sábados das 11:00 às 12:00.';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('agendar')">Quero agendar</div>
+                            <div class="quick-reply" onclick="scrollToSection('about')">Mais informações</div>
+                        `;
+            } else if (lowerMessage.includes('faixa') || lowerMessage.includes('nível')) {
+                response = 'Nossos níveis são:\n\n' +
+                    '1. Iniciante (Faixa Branca)\n' +
+                    '2. Intermediário (Faixa Azul)\n' +
+                    '3. Avançado (Faixa Preta)\n\n' +
+                    'Cada nível tem seu próprio programa de treinamento e objetivos específicos.';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('agendar')">Quero começar</div>
+                            <div class="quick-reply" onclick="scrollToSection('about')">Sobre os níveis</div>
+                        `;
+            } else {
+                response = 'Olá! Como posso ajudar você hoje? Posso te informar sobre:\n\n' +
+                    '1. Planos e valores\n' +
+                    '2. Horários das aulas\n' +
+                    '3. Defesa pessoal\n' +
+                    '4. Níveis e faixas\n' +
+                    '5. Formas de pagamento\n\n' +
+                    'Sobre qual desses assuntos você gostaria de saber mais?';
+                quickReplies = `
+                            <div class="quick-reply" onclick="handleQuickReply('planos')">Planos</div>
+                            <div class="quick-reply" onclick="handleQuickReply('horarios')">Horários</div>
+                            <div class="quick-reply" onclick="handleQuickReply('defesa')">Defesa Pessoal</div>
+                            <div class="quick-reply" onclick="handleQuickReply('faixas')">Níveis</div>
+                        `;
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = response.replace(/\n/g, '<br>');
+
+            if (quickReplies) {
+                messageDiv.innerHTML += `<div class="quick-replies">${quickReplies}</div>`;
+            }
+
+            document.getElementById('chatMessages').appendChild(messageDiv);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const headerOffset = 100;
+                const elementPosition = section.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Modal de cadastro
+        function abrirModalCadastro() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                window.location.href = 'dashboard.html';
+            } else {
+                document.getElementById('cadastroModal').style.display = 'flex';
+            }
+        }
+
+        function fecharModalCadastro() {
+            document.getElementById('cadastroModal').style.display = 'none';
+        }
+
+        // Formulário de cadastro
+        document.getElementById('cadastroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById('cadastroNome').value;
+            const email = document.getElementById('cadastroEmail').value;
+            const senha = document.getElementById('cadastroSenha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+            if (senha !== confirmarSenha) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+
+            try {
+                const response = await fetch('api.php?endpoint=register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: nome,
+                        email: email,
+                        password: senha
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('userName', nome);
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userType', 'aluno');
+                    localStorage.setItem('isLoggedIn', 'true');
+
+                    const planoSelecionado = localStorage.getItem('planoSelecionado');
+                    if (planoSelecionado) {
+                        window.location.href = 'checkout.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    alert(data.message || 'Erro ao realizar cadastro');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao realizar cadastro. Verifique se o servidor está rodando.');
+            }
+        });
+
+        // Fechar modal ao clicar fora
+        window.onclick = function (event) {
+            const modal = document.getElementById('cadastroModal');
+            if (event.target == modal) {
+                fecharModalCadastro();
+            }
+        }
+
+        // Animações ao scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.about-card, .plan-card, .testimonial-card');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Inicializar animações
+        window.addEventListener('load', function () {
+            const elements = document.querySelectorAll('.about-card, .plan-card, .testimonial-card');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+
+            animateOnScroll();
+        });
+
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+
+</html>
